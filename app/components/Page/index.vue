@@ -2,10 +2,11 @@
 const instance = getCurrentInstance();
 const emitUsed = (emit: string) => !!instance?.vnode.props?.[emit];
 
-const { module, select, columns, fields, customAddApi, customEditApi } =
+const { module, select, where, columns, fields, customAddApi, customEditApi } =
   defineProps<{
     module: string;
     select?: string;
+    where?: Record<string, string>;
     columns: Column[];
     fields: Field[];
 
@@ -28,7 +29,7 @@ const emit = defineEmits<{
 
 const { authUser } = storeToRefs(useAuthStore());
 
-const store = useStore(module, select);
+const store = useStore(module, { select, where });
 const { viewType, records, submitting } = storeToRefs(store);
 store.fetchRecords();
 

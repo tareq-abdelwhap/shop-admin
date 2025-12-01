@@ -1,13 +1,20 @@
 <script lang="ts" setup>
-const { authUser } = storeToRefs(useAuthStore());
+const { invoice_source = 'client' } = defineProps<{
+  invoice_source?: 'client' | 'vendor';
+}>();
 
 const emit = defineEmits<{
   (e: 'submitted', invoiceId: number): void;
 }>();
 
-const loadingServices = ref(true);
+const { authUser } = storeToRefs(useAuthStore());
 
-const services = ref<any[]>([]);
+const serviceStore = useStore('services');
+const { records: services } = storeToRefs(serviceStore);
+serviceStore.fetchRecords();
+
+const invoiceStore = useStore('invoices');
+const { records: invoices } = storeToRefs(invoiceStore);
 
 const items = ref<any>([
   {
@@ -45,7 +52,7 @@ const searchItem = (index: number) => {
     return;
   }
 
-  const serviceMatches = services.value
+  const serviceMatches = services.value.data
     .filter(s => s.name.toLowerCase().includes(term))
     .map(s => ({ ...s, type: 'service' }));
 
@@ -77,19 +84,6 @@ const discount = computed(() =>
 
 const extraDiscount = ref<number>(0);
 
-const fetchServices = async () => {
-  const { data } = await supabase()
-    .from('services')
-    .select('*')
-    .is('deleted_at', null)
-    .eq('shop_id', authUser.value?.shopId);
-
-  services.value = data || [];
-  loadingServices.value = false;
-};
-
-onMounted(() => fetchServices());
-
 // Form validation setup
 const fields = ref([
   {
@@ -104,25 +98,35 @@ const submitting = ref(false);
 const onFormSubmit = async () => {
   submitting.value = true;
 
-  const { data: invoice, error } = await supabase()
-    .from('invoices')
-    .insert({
-      shop_id: authUser.value?.shopId,
-      customer_name: getField('customer_name').value,
-      total: total.value,
-      discount: discount.value,
-      extra_discount: extraDiscount.value,
-      created_by: authUser.value?.id,
-    })
-    .select()
-    .single();
+  // const { data: invoice, error } = await supabase()
+  //   .from('invoices')
+  //   .insert({
+  //     shop_id: authUser.value?.shopId,
+  //     customer_name: getField('customer_name').value,
+  //     total: total.value,
+  //     discount: discount.value,
+  //     extra_discount: extraDiscount.value,
+  //     created_by: authUser.value?.id,
+  //   })
+  //   .select()
+  //   .single();
+
+  const { date: invoice, error } = await invoiceStore.addRecord({
+    shop_id: authUser.value?.shopId,
+    customer_name: getField('customer_name').value,
+    total: total.value,
+    discount: discount.value,
+    extra_discount: extraDiscount.value,
+    created_by: authUser.value?.id,
+    invoice_source,
+  });
 
   if (error) {
     console.error(error);
     return;
   }
 
-  const lineItems = items.value.map(row => ({
+  const lineItems = items.value.map((row: any) => ({
     invoice_id: invoice.id,
     item_type: row.item_type,
     ...(row.service_id ? { service_id: row.service_id } : {}),
@@ -181,10 +185,11 @@ function getField(key: string) {
                   <Select
                     v-model="data.search"
                     editable
-                    :options="data.suggestions || services"
+                    :options="data.suggestions || services.data"
                     option-label="name"
                     :name="`item-${index}`"
                     size="small"
+                    :loading="services.loading"
                     fluid
                     @hide="() => selectItem(index, data.search)"
                   />

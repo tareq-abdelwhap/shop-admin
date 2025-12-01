@@ -1,9 +1,6 @@
 <script setup lang="ts">
-const { authUser } = storeToRefs(useAuthStore());
-
-const invoiceStore = useInvoiceStore();
-const { invoices } = storeToRefs(invoiceStore);
-invoiceStore.fetchInvoices();
+const where = { invoice_source: 'client' };
+const invoiceStore = useStore('invoice', { where });
 
 const t = (key: string) => computed(() => $t(`${key}`));
 
@@ -22,36 +19,15 @@ const fields = ref<Field[]>([
   { key: 'discount', label: t('discount'), type: 'number', value: null },
 ]);
 
-const deletingId = ref<number | null>(null);
-const removeInvoice = async (invoice: any) => {
-  if (!confirm('Delete this Invoice?')) return;
-  deletingId.value = invoice.id;
-  await invoiceStore.deleteRestoreInvoice('delete', invoice);
-  deletingId.value = null;
-};
-
-const restoreInvoice = async (invoice: any) => {
-  if (!confirm('Restore this Invoice?')) return;
-  deletingId.value = invoice.id;
-  await invoiceStore.deleteRestoreInvoice('restore', invoice);
-  deletingId.value = null;
-};
-
 const createVisible = ref(false);
 const viewVisible = ref(false);
 const invoiceId = ref<number>();
 
 const afterCreate = async (_invoiceId: number) => {
   createVisible.value = false;
-  invoiceStore.fetchInvoices();
+  invoiceStore.fetchRecords();
   invoiceId.value = _invoiceId;
   viewVisible.value = true;
-};
-
-const onPagination = (page: { page: number; rows: number }) => {
-  invoices.value.pagination.page = page.page;
-  invoices.value.pagination.rows = page.rows;
-  invoiceStore.fetchInvoices();
 };
 </script>
 
@@ -59,6 +35,7 @@ const onPagination = (page: { page: number; rows: number }) => {
   <Page
     module="invoices"
     select="*, shop_members ( full_name )"
+    :where
     :columns
     :fields
     with-view-button
@@ -73,7 +50,10 @@ const onPagination = (page: { page: number; rows: number }) => {
     :position="$i18n.localeProperties.value.dir === 'rtl' ? 'left' : 'right'"
     class="!w-full lg:!w-2/3"
   >
-    <InvoiceCreate @submitted="invoiceId => afterCreate(invoiceId)" />
+    <InvoiceCreate
+      invoice-source="client"
+      @submitted="invoiceId => afterCreate(invoiceId)"
+    />
   </Drawer>
 
   <Drawer
