@@ -6,7 +6,7 @@ const { authUser } = storeToRefs(useAuthStore());
 
 const route = useRoute();
 const { t } = useI18n();
-const { isOwner } = storeToRefs(useShopStore());
+const { isOwner } = storeToRefs(useRoleStore());
 
 const isMobileMenuOpen = ref(false); // NEW
 

@@ -6,7 +6,7 @@ export type ShopRole =
   | 'technician'
   | 'employee';
 
-export const useShopStore = defineStore('shopStore', () => {
+export const useRoleStore = defineStore('shopStore', () => {
   /* Handling Shop Role */
   const { authUser } = storeToRefs(useAuthStore());
 

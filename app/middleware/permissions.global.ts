@@ -1,5 +1,5 @@
 export default defineNuxtRouteMiddleware(async to => {
-  const shopPermissionStore = useShopStore();
+  const shopPermissionStore = useRoleStore();
   const { role } = storeToRefs(shopPermissionStore);
   if (!role.value) await shopPermissionStore.fetchRole();
 
