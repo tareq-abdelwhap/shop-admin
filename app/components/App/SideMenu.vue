@@ -1,19 +1,24 @@
 <script setup lang="ts">
+import Button from 'primevue/button';
+import { useRoute, navigateTo } from '#imports';
+import { useAuthStore } from '~/stores/auth';
+
 interface MenuItem {
   label: string;
   icon: string;
   to: string;
 }
-const { isMobile } = defineProps<{
+
+const props = defineProps<{
   menuItems: MenuItem[];
-  isMobile?: boolean; // NEW
+  isMobile?: boolean;
 }>();
 
-const collapsed = isMobile ? ref(false) : useCookie<boolean>('collapsed');
-
+const collapsed = props.isMobile ? ref(false) : useCookie<boolean>('collapsed');
 const toggleSidebar = () => (collapsed.value = !collapsed.value);
 
 const route = useRoute();
+
 const auth = useAuthStore();
 const { authUser } = storeToRefs(auth);
 
@@ -25,87 +30,81 @@ const logout = async () => {
 </script>
 
 <template>
-  <div
+  <aside
     :class="[
-      'flex flex-col overflow-hidden',
-      'bg-white text-gray-900 dark:bg-gray-800 dark:text-white',
-      'rounded-lg shadow-md',
-      'w-full h-full',
-      collapsed ? 'md:w-16' : 'md:w-64',
-      'transition-[width] duration-300',
+      'h-full flex flex-col bg-white dark:bg-zinc-900 shadow-md border-r dark:border-gray-700',
+      'transition-all duration-300 overflow-hidden rounded-lg',
+      collapsed ? 'md:w-20' : 'md:w-64',
+      'w-full',
     ]"
   >
     <!-- Header -->
-    <div
-      :class="[
-        'hidden md:flex',
-        'items-center justify-between p-3 border-b dark:border-gray-700 min-h-[60px]',
-      ]"
+    <header
+      class="hidden md:flex items-center justify-between px-4 h-[60px] border-b dark:border-gray-700"
     >
-      <transition name="fade">
-        <span v-if="!collapsed" class="font-semibold text-lg truncate">
-          {{ authUser?.shopName?.toUpperCase() }}
-        </span>
+      <transition name="fade-fast">
+        <h2
+          v-if="!collapsed"
+          class="font-semibold text-lg truncate text-gray-900 dark:text-white"
+          v-text="authUser?.shopName?.toUpperCase()"
+        />
       </transition>
+    </header>
 
-      <!-- Only show collapse button on desktop -->
-      <Button
-        :icon="collapsed ? 'pi pi-angle-right' : 'pi pi-angle-left'"
-        text
-        rounded
-        class="hover:bg-gray-200 dark:hover:bg-gray-700 rtl:rotate-180"
-        @click="toggleSidebar"
-      />
-    </div>
+    <!-- Menu -->
+    <nav class="flex-1 py-3">
+      <div v-for="item in menuItems" :key="item.to" class="group">
+        <NuxtLink
+          :to="item.to"
+          class="flex items-center gap-3 mx-2 mb-1 rounded-lg transition-all"
+          :class="[
+            'px-4 py-3',
+            'hover:bg-gray-200 dark:hover:bg-gray-700 transition',
+            route.path.startsWith(item.to) &&
+              'font-bold text-green-600 dark:text-green-400',
+          ]"
+        >
+          <i :class="[item.icon, 'text-xl w-6 text-center mx-auto shrink']" />
 
-    <!-- Navigation -->
-    <nav
-      class="flex-1 overflow-y-auto py-2"
-      :class="collapsed ? 'px-2' : 'px-3'"
-    >
-      <NuxtLink
-        v-for="item in menuItems"
-        :key="item.to"
-        :to="item.to"
-        class="flex items-center gap-3 rounded-lg cursor-pointer mb-1"
-        :class="[
-          collapsed ? 'justify-center p-3' : 'px-4 py-2',
-          'hover:bg-gray-200 dark:hover:bg-gray-700 transition',
-          route.path.startsWith(item.to) &&
-            'font-bold text-green-600 dark:text-green-400',
-        ]"
-      >
-        <i :class="['pi', item.icon, 'text-lg w-5 text-center']" />
-        <transition name="fade">
-          <span v-if="!collapsed">{{ $t(item.label) }}</span>
-        </transition>
-      </NuxtLink>
+          <transition name="fade-fast">
+            <span
+              v-if="!collapsed"
+              class="whitespace-nowrap truncate flex-1 me-auto"
+              v-text="$t(item.label)"
+            />
+          </transition>
+        </NuxtLink>
+      </div>
     </nav>
 
     <!-- Logout -->
-    <div class="p-3 border-t dark:border-gray-700">
-      <NuxtLink
+    <footer class="p-3 border-t dark:border-gray-700">
+      <button
         @click="logout"
-        class="flex items-center gap-3 rounded-lg text-red-500 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700"
-        :class="collapsed ? 'justify-center p-3' : 'px-4 py-2'"
+        class="w-full flex items-center gap-3 rounded-lg text-red-500 hover:bg-red-100 dark:hover:bg-gray-700 transition"
+        :class="collapsed ? 'justify-center p-3' : 'px-4 py-3'"
       >
-        <i class="pi pi-sign-out text-lg w-5 text-center"></i>
-        <transition name="fade">
-          <span v-if="!collapsed">{{ $t('logout') }}</span>
+        <i class="pi pi-sign-out text-xl" />
+
+        <transition name="fade-fast">
+          <span
+            v-if="!collapsed"
+            class="whitespace-nowrap"
+            v-text="$t('logout')"
+          />
         </transition>
-      </NuxtLink>
-    </div>
-  </div>
+      </button>
+    </footer>
+  </aside>
 </template>
 
 <style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: width 0.2s ease;
+.fade-fast-enter-active,
+.fade-fast-leave-active {
+  transition: opacity 0.3s ease-in-out;
 }
-
-.fade-enter-from,
-.fade-leave-to {
-  width: 0;
+.fade-fast-enter-from,
+.fade-fast-leave-to {
+  opacity: 0;
 }
 </style>

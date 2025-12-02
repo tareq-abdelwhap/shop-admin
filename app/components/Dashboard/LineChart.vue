@@ -24,7 +24,7 @@ const options = {
 </script>
 
 <template>
-  <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow h-80">
+  <div class="bg-white dark:bg-zinc-900 p-4 rounded-lg shadow h-80">
     <h2 class="text-lg font-semibold mb-2">Daily Sales</h2>
     <Chart type="line" :data="data" :options="options" class="h-full" />
   </div>

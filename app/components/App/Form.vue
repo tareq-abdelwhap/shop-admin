@@ -3,6 +3,7 @@ const { validationExceptions = [], fluid = true } = defineProps<{
   submitLabel?: string;
   submitting?: boolean;
   validationExceptions?: string[];
+  fieldSize?: 'small' | 'large';
   fluid?: boolean;
 }>();
 
@@ -68,6 +69,7 @@ function getField(key: string) {
           :id="field.key"
           autocomplete="off"
           :name="field.key"
+          :size="fieldSize"
           :fluid
         />
 
@@ -78,6 +80,7 @@ function getField(key: string) {
           autocomplete="off"
           :name="field.key"
           toggleMask
+          :size="fieldSize"
           :fluid
         />
 
@@ -88,6 +91,7 @@ function getField(key: string) {
           autocomplete="off"
           :name="field.key"
           :type="field.type"
+          :size="fieldSize"
           :fluid
         />
 
@@ -116,8 +120,8 @@ function getField(key: string) {
     <Button
       type="submit"
       :label="submitLabel || 'Submit'"
-      class="h-fit w-fit"
       :loading="submitting"
+      :fluid
     />
   </Form>
 </template>

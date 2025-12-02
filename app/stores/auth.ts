@@ -65,7 +65,7 @@ export const useAuthStore = defineStore('auth', () => {
       shopNumber: data.shops.number,
     });
 
-    navigateTo('/dashboard');
+    await navigateTo('/dashboard');
   };
 
   return { authUser, setUser, error, isLoggedIn, isOwner, login };

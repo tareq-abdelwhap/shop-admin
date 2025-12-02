@@ -118,7 +118,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="space-y-6">
+  <Container class="flex flex-col gap-6">
     <!-- KPI CARDS -->
     <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
       <DashboardCard title="Total Revenue" :value="totalRevenue" color="blue" />
@@ -143,5 +143,5 @@ onMounted(async () => {
       <h2 class="text-xl font-semibold mb-4">Profit by Product</h2>
       <DashboardProfitByProduct :items="profitByProduct" />
     </div>
-  </div>
+  </Container>
 </template>

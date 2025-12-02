@@ -43,8 +43,20 @@ export default defineNuxtConfig({
     strategy: 'no_prefix',
     defaultLocale: 'ar',
     locales: [
-      { code: 'ar', name: 'العربية', file: 'ar.json', dir: 'rtl' },
-      { code: 'en', name: 'English', file: 'en.json', dir: 'ltr' },
+      {
+        code: 'ar',
+        name: 'العربية',
+        file: 'ar.json',
+        flag: '/flags/ar.png',
+        dir: 'rtl',
+      },
+      {
+        code: 'en',
+        name: 'English',
+        file: 'en.json',
+        flag: '/flags/en.png',
+        dir: 'ltr',
+      },
     ],
     langDir: 'locales',
   },

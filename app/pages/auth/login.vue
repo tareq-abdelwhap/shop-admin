@@ -1,41 +1,57 @@
-<script setup>
+<script setup lang="ts">
 definePageMeta({ layout: false });
 
-const email = ref('');
-const password = ref('');
+const t = (key: string) => computed(() => $t(`${key}`));
 
-const authStore = useAuthStore();
-const { error } = storeToRefs(authStore);
+const fields = ref([
+  { key: 'email', label: t('email'), type: 'email', value: '' },
+  { key: 'password', label: t('password'), type: 'password', value: '' },
+]);
 
-const login = async () => authStore.login(email.value, password.value);
+const submitting = ref(false);
+
+const login = async () => {
+  submitting.value = true;
+  await useAuthStore().login(
+    getField('email')!.value,
+    getField('password')!.value
+  );
+  submitting.value = false;
+};
+
+const getField = (key: string) => fields.value.find(f => f.key === key);
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-100">
-    <form @submit.prevent="login" class="bg-white p-6 shadow rounded w-80">
-      <h1 class="text-xl font-bold mb-4">{{ $t('login') }}</h1>
+  <div
+    :class="[
+      'relative min-h-screen',
+      'flex items-center justify-center',
+      'bg-gray-100 dark:bg-zinc-950',
+    ]"
+  >
+    <div class="flex items-center gap-4 absolute top-4 end-4">
+      <AppLanguageSwitcher />
+      <AppColorModeSwitcher />
+    </div>
 
-      <input
-        v-model="email"
-        type="email"
-        required
-        class="w-full border px-3 py-2 rounded mb-3"
-        :placeholder="$t('email')"
-      />
+    <Card class="w-full mx-3 max-w-xl md:px-8 md:scale-110 rounded-3xl">
+      <template #title>
+        <div class="flex items-center justify-center py-6">
+          <h1 class="text-2xl font-semibold" v-text="$t('login')" />
+        </div>
+      </template>
 
-      <input
-        v-model="password"
-        type="password"
-        required
-        class="w-full border px-3 py-2 rounded mb-3"
-        :placeholder="$t('password')"
-      />
-
-      <button class="w-full bg-blue-600 text-white py-2 rounded">
-        {{ $t('login') }}
-      </button>
-
-      <p class="text-red-500 text-sm mt-3" v-if="error">{{ error }}</p>
-    </form>
+      <template #content>
+        <AppForm
+          v-model="fields"
+          :submitting
+          :submit-label="$t('login')"
+          field-size="large"
+          class="!gap-12"
+          @submit="() => login()"
+        />
+      </template>
+    </Card>
   </div>
 </template>

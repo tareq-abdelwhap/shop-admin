@@ -8,7 +8,7 @@ defineProps<{
 
 <template>
   <div
-    class="p-5 rounded-xl shadow bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+    class="p-5 rounded-xl shadow bg-white dark:bg-zinc-900 text-gray-900 dark:text-white"
   >
     <p class="text-sm opacity-70">{{ title }}</p>
     <p
