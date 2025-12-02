@@ -8,7 +8,7 @@ const emit = defineEmits(['toggle-mobile']); // NEW
 
 <template>
   <header
-    class="h-16 bg-slate-300 text-gray-900 dark:bg-gray-800 dark:text-white rounded-lg flex items-center justify-between px-4 md:px-6"
+    class="h-16 bg-white shadow-md text-gray-900 dark:bg-gray-800 dark:text-white rounded-lg flex items-center justify-between px-4 md:px-6"
   >
     <!-- LEFT AREA -->
     <div class="flex items-center gap-4">

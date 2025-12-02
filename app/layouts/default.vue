@@ -33,7 +33,7 @@ const isMobile = useMediaQuery('(max-width: 768px)');
 
 <template>
   <div
-    class="min-h-screen flex flex-col md:flex-row bg-white dark:bg-gray-950 p-4 gap-4"
+    class="min-h-screen flex flex-col md:flex-row bg-gray-100 dark:bg-gray-950 p-4 gap-4"
   >
     <!-- Mobile Drawer -->
 

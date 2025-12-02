@@ -28,7 +28,7 @@ const logout = async () => {
   <div
     :class="[
       'flex flex-col overflow-hidden',
-      'bg-slate-300 text-gray-900 dark:bg-gray-800 dark:text-white',
+      'bg-white text-gray-900 dark:bg-gray-800 dark:text-white',
       'rounded-lg shadow-md',
       'w-full h-full',
       collapsed ? 'md:w-16' : 'md:w-64',
