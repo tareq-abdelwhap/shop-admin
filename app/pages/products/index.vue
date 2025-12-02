@@ -38,18 +38,5 @@ const { cogs, profit, revenue, loading, error, loadFIFO } = useFIFO();
     :validation-exceptions="['discount']"
     with-edit-button
     with-delete-button
-  >
-    <template #table>
-      <Column header="Test Column" type="price">
-        <template #body="{ data }">
-          {{ JSON.stringify(loadFIFO(data.id)) }}
-        </template>
-      </Column>
-    </template>
-  </Page>
-
-  <pre>loading: {{ loading }}</pre>
-  <pre>cogs: {{ cogs }}</pre>
-  <pre>profit: {{ profit }}</pre>
-  <pre>revenue: {{ revenue }}</pre>
+  />
 </template>
