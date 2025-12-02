@@ -71,6 +71,12 @@ const sort = (column: string, ascending: boolean) => {
               <slot :name="column.field" v-bind="prop">
                 <span v-if="column.field === 'id'" v-text="prop.index + 1" />
                 <span
+                  v-else-if="column.value"
+                  v-text="
+                    useGetField(column.value(prop.data), undefined, column.type)
+                  "
+                />
+                <span
                   v-else
                   v-text="useGetField(prop.data, column.field, column.type)"
                 />

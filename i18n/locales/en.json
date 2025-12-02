@@ -32,5 +32,27 @@
   "invoiceDetails": "Invoice Details",
   "invoice_kind_product": "Products",
   "invoice_kind_service": "Services",
-  "invoice_kind_mixed": "Mixed"
+  "invoice_kind_mixed": "Mixed",
+  "addRecord": "Add Record",
+  "editRecord": "Edit Record",
+  "active": "Active",
+  "deleted": "Deleted",
+  "all": "All",
+  "time": {
+    "justNow": "just now",
+    "past": "{n} ago",
+    "future": "in {n}",
+    "invalid": "invalid date",
+    "seconds": "seconds",
+    "minute": "minute",
+    "minutes": "{n} minutes",
+    "hour": "hour",
+    "hours": "{n} hours",
+    "day": "day",
+    "days": "{n} days",
+    "month": "month",
+    "months": "{n} months",
+    "year": "year",
+    "years": "{n} years"
+  }
 }

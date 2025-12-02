@@ -268,14 +268,16 @@ function getField(key: string) {
 
             <Column :header="$t('total')" class="w-36">
               <template #body="{ data, index }">
-                {{ formatPrice(data.quantity * data.unit_price) }}
+                {{ useFormatPrice(data.quantity * data.unit_price) }}
               </template>
             </Column>
 
             <Column :header="$t('totalAfterDiscount')" class="w-36">
               <template #body="{ data, index }">
                 {{
-                  formatPrice(data.quantity * (data.unit_price - data.discount))
+                  useFormatPrice(
+                    data.quantity * (data.unit_price - data.discount)
+                  )
                 }}
               </template>
             </Column>
@@ -310,7 +312,7 @@ function getField(key: string) {
 
     <!-- total -->
     <div class="text-start text-lg font-bold">
-      {{ $t('total') }}: {{ formatPrice(total) }}
+      {{ $t('total') }}: {{ useFormatPrice(total) }}
     </div>
 
     <!-- total -->
@@ -329,7 +331,7 @@ function getField(key: string) {
     <!-- total -->
     <div class="text-start text-lg font-bold">
       {{ $t('totalAfterDiscount') }}:
-      {{ formatPrice(total - (discount + extraDiscount)) }}
+      {{ useFormatPrice(total - (discount + extraDiscount)) }}
     </div>
   </AppForm>
 </template>

@@ -11,11 +11,15 @@ const t = (key: string) => computed(() => $t(`${key}`));
 
 const columns: Column[] = [
   { field: 'id', header: t('id'), class: 'w-24' },
-  { field: 'created_at', header: t('date'), type: 'date' },
+  { field: 'created_at', header: t('date'), type: 'date', class: 'w-1/6' },
   { field: 'customer_name', header: t('customerName') },
-  { field: 'invoice_items.0.sum', header: t('quantity') },
-  { field: 'total', header: t('total') },
-  { field: 'total_after_discount', header: t('totalAfterDiscount') },
+  { field: 'invoice_items.0.sum', header: t('quantity'), class: 'w-24' },
+  { field: 'total', header: t('total'), class: 'w-36' },
+  {
+    field: 'total_after_discount',
+    header: t('totalAfterDiscount'),
+    value: (data: any) => data.total - (data.discount + data.extra_discount),
+  },
   { field: 'shop_members.full_name', header: t('createdBy') },
 ];
 
@@ -49,15 +53,7 @@ const afterCreate = async (_invoiceId: number) => {
     with-delete-button
     @add="() => (createVisible = true)"
     @view="record => [(invoiceId = record.id), (viewVisible = true)]"
-  >
-    <!-- <template #table>
-      <Column field="total_after_discount" :header="$t('totalAfterDiscount')">
-        <template #body="{ data }">
-          {{ formatPrice(data.total - (data.discount + data.extra_discount)) }}
-        </template>
-      </Column>
-    </template> -->
-  </Page>
+  />
 
   <Drawer
     v-model:visible="createVisible"

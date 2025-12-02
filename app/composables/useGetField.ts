@@ -1,9 +1,9 @@
 export const useGetField = (
   data: any,
-  key: string,
+  key?: string,
   type?: Column['type']
 ): any => {
-  if (!key) return false;
+  if (!key) return format(data, type);
 
   const _key = key?.split('.');
 
@@ -13,9 +13,12 @@ export const useGetField = (
 
   let field = data[_key?.at(0)!];
 
-  if (type === 'price') field = formatPrice(field);
+  return format(field, type);
+};
 
-  if (type === 'date') field = new Date(field).toLocaleString();
-
-  return field;
+const format = (value: any, type?: Column['type']) => {
+  if (type === 'price') return useFormatPrice(value);
+  // if (type === 'date') return new Date(value).toLocaleDateString();
+  if (type === 'date') return useLocalizationTimeAgo(value);
+  return value;
 };

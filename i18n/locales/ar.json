@@ -32,5 +32,27 @@
   "invoiceDetails": "تفاصيل الفاتورة",
   "invoice_kind_product": "منتجات",
   "invoice_kind_service": "خدمات",
-  "invoice_kind_mixed": "مختلط"
+  "invoice_kind_mixed": "مختلط",
+  "addRecord": "اضافة سجل",
+  "editRecord": "تعديل سجل",
+  "active": "نشط",
+  "deleted": "محذوف",
+  "all": "الكل",
+  "time": {
+    "justNow": "الآن",
+    "past": "منذ {n}",
+    "future": "بعد {n}",
+    "invalid": "تاريخ غير صالح",
+    "seconds": "ثواني",
+    "minute": "دقيقة",
+    "minutes": "{n} دقائق",
+    "hour": "ساعة",
+    "hours": "{n} ساعات",
+    "day": "يوم",
+    "days": "{n} أيام",
+    "month": "شهر",
+    "months": "{n} أشهر",
+    "year": "سنة",
+    "years": "{n} سنوات"
+  }
 }

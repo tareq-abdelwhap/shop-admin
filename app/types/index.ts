@@ -8,6 +8,7 @@ declare global {
     type?: 'price' | 'date';
     style?: string;
     class?: string;
+    value?: (...args: any) => any;
   };
 
   type Field = {

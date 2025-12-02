@@ -86,13 +86,13 @@ fetchInvoice();
 
       <Column :header="$t('price')">
         <template #body="{ data }">
-          {{ formatPrice(data.unit_price) }}
+          {{ useFormatPrice(data.unit_price) }}
         </template>
       </Column>
 
       <Column :header="$t('discount')">
         <template #body="{ data }">
-          {{ formatPrice(data.discount) }}
+          {{ useFormatPrice(data.discount) }}
         </template>
       </Column>
 
@@ -100,13 +100,13 @@ fetchInvoice();
 
       <Column :header="$t('total')">
         <template #body="{ data }">
-          {{ formatPrice(data.line_total) }}
+          {{ useFormatPrice(data.line_total) }}
         </template>
       </Column>
 
       <Column :header="$t('totalAfterDiscount')">
         <template #body="{ data }">
-          {{ formatPrice(data.discount && data.line_total - data.discount) }}
+          {{ useFormatPrice(data.discount && data.line_total - data.discount) }}
         </template>
       </Column>
 
@@ -119,14 +119,14 @@ fetchInvoice();
           />
           <Column
             :footer="
-              formatPrice(items.reduce((sum, r) => sum + r.discount, 0) || 0)
+              useFormatPrice(items.reduce((sum, r) => sum + r.discount, 0) || 0)
             "
           />
           <Column :footer="items.reduce((sum, r) => sum + r.quantity, 0)" />
-          <Column :footer="formatPrice(invoice?.total || 0)" />
+          <Column :footer="useFormatPrice(invoice?.total || 0)" />
           <Column
             :footer="
-              formatPrice(
+              useFormatPrice(
                 (items.reduce((sum, r) => sum + r.discount, 0) &&
                   invoice?.total -
                     items.reduce((sum, r) => sum + r.discount, 0)) ||
@@ -143,7 +143,7 @@ fetchInvoice();
           />
           <Column
             :colspan="4"
-            :footer="formatPrice(invoice?.extra_discount || 0)"
+            :footer="useFormatPrice(invoice?.extra_discount || 0)"
           />
         </Row>
         <Row>
@@ -155,7 +155,7 @@ fetchInvoice();
           <Column :colspan="3" />
           <Column
             :footer="
-              formatPrice(
+              useFormatPrice(
                 (invoice?.discount + invoice?.extra_discount &&
                   invoice?.total -
                     (invoice?.discount + invoice?.extra_discount)) ||
