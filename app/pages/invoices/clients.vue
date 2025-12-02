@@ -1,11 +1,10 @@
 <script setup lang="ts">
 const select = '*, shop_members(full_name), invoice_items(sum:quantity)';
-const count = { count: 'exact' };
 
 const invoice_source = 'client';
 const where = { invoice_source };
 
-const invoiceStore = useStore('invoice', { select, where });
+const invoiceStore = useStore('invoices', { select, where });
 
 const t = (key: string) => computed(() => $t(`${key}`));
 
@@ -45,7 +44,6 @@ const afterCreate = async (_invoiceId: number) => {
   <Page
     module="invoices"
     :select
-    :count
     :where
     :columns
     :fields
@@ -62,7 +60,6 @@ const afterCreate = async (_invoiceId: number) => {
     class="!w-full lg:!w-2/3"
   >
     <InvoiceCreate
-      key="client"
       :invoice-source="invoice_source"
       @submitted="invoiceId => afterCreate(invoiceId)"
     />
@@ -74,6 +71,6 @@ const afterCreate = async (_invoiceId: number) => {
     :position="$i18n.localeProperties.value.dir === 'rtl' ? 'left' : 'right'"
     class="!w-full lg:!w-2/3"
   >
-    <InvoiceView :invoice-id />
+    <InvoiceView :invoice-source="invoice_source" :invoice-id />
   </Drawer>
 </template>

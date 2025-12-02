@@ -1,6 +1,8 @@
 import { useTimeAgo } from '@vueuse/core';
 
 export const useLocalizationTimeAgo = (date: string) => {
+  return new Date(date).toLocaleDateString();
+
   const { t } = useI18n();
 
   return useTimeAgo(date, {

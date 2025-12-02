@@ -2,7 +2,6 @@ export const useStore = (
   tableName: string,
   options?: {
     select?: string;
-    count?: { count: string };
     where?: any;
   }
 ) => {

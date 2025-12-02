@@ -1,29 +1,23 @@
 <script setup lang="ts">
-// import { Chart } from "primevue/chart";
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
 
-const { items } = defineProps<{
-  items: any;
+defineProps<{
+  items: {
+    product_id: string;
+    product_name: string;
+    revenue: number;
+    cogs: number;
+    profit: number;
+  }[];
 }>();
-
-const data = computed(() => ({
-  labels: items.map(x => x.product),
-  datasets: [
-    {
-      label: 'Profit',
-      backgroundColor: '#22c55e',
-      data: items.map(x => x.profit),
-    },
-  ],
-}));
-
-const options = {
-  responsive: true,
-  maintainAspectRatio: false,
-};
 </script>
 
 <template>
-  <div class="h-80">
-    <Chart type="bar" :data="data" :options="options" />
-  </div>
+  <DataTable :value="items" stripedRows responsiveLayout="scroll">
+    <Column field="product_name" header="Product" />
+    <Column field="revenue" header="Revenue" />
+    <Column field="cogs" header="COGS" />
+    <Column field="profit" header="Profit" />
+  </DataTable>
 </template>

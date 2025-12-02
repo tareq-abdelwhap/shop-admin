@@ -91,8 +91,14 @@ const selectItem = (index: number, suggestion: any) => {
   }
 
   items.value[index]!.description = suggestion.name;
-  items.value[index]!.unit_price = suggestion.price;
-  items.value[index]!.discount = suggestion.discount;
+
+  if (invoiceSource === 'vendor') {
+    items.value[index]!.unit_price = suggestion.vendor_price;
+    items.value[index]!.discount = 0;
+  } else {
+    items.value[index]!.unit_price = suggestion.price;
+    items.value[index]!.discount = suggestion.discount;
+  }
 
   items.value[index]!.search = suggestion.name;
 
@@ -109,11 +115,12 @@ const discount = computed(() =>
 
 const extraDiscount = ref<number>(0);
 
-// Form validation setup
+const t = (key: string) => computed(() => $t(`${key}`));
+
 const fields = ref([
   {
     key: 'customer_name',
-    label: $t('customerName'),
+    label: t(invoiceSource === 'vendor' ? 'vendorName' : 'customerName'),
     type: 'text',
     value: null,
   },
@@ -127,8 +134,9 @@ const onFormSubmit = async () => {
     shop_id: authUser.value?.shopId,
     customer_name: getField('customer_name').value,
     total: total.value,
-    discount: discount.value,
-    extra_discount: extraDiscount.value,
+    ...(invoiceSource === 'vendor'
+      ? { discount: 0, extra_discount: 0 }
+      : { discount: discount.value, extra_discount: extraDiscount.value }),
     created_by: authUser.value?.id,
     invoice_source: invoiceSource,
   });
@@ -146,7 +154,9 @@ const onFormSubmit = async () => {
     description: row.search || row.description,
     quantity: row.quantity,
     unit_price: row.unit_price,
-    discount: row.discount * row.quantity,
+    ...(invoiceSource === 'vendor'
+      ? { discount: 0 }
+      : { discount: row.discount * row.quantity }),
     line_total: row.unit_price * row.quantity,
   }));
 
@@ -178,23 +188,6 @@ function getField(key: string) {
             <Column :header="$t('service')" style="width: 35%">
               <template #body="{ data, index }">
                 <FloatLabel variant="on">
-                  <!-- <AutoComplete
-                    v-model="data.search"
-                    :id="`item-${index}`"
-                    :suggestions="services"
-                    option-label="name"
-                    option-value="name"
-                    :name="`item-${index}`"
-                    size="small"
-                    fluid
-                    dropdown
-                    :loading="loadingServices"
-                    @complete="() => searchItem(index)"
-                    @item-select="({ value }) => selectItem(index, value)"
-                  >
-                    <template #content="{ items }"> {{ items }}ss </template>
-                  </AutoComplete> -->
-
                   <Select
                     v-model="data.search"
                     editable
@@ -230,7 +223,11 @@ function getField(key: string) {
               </template>
             </Column>
 
-            <Column :header="$t('discount')" class="w-36">
+            <Column
+              v-if="invoiceSource === 'client'"
+              :header="$t('discount')"
+              class="w-36"
+            >
               <template #body="{ data, index }">
                 <FloatLabel variant="on">
                   <InputNumber
@@ -315,8 +312,8 @@ function getField(key: string) {
       {{ $t('total') }}: {{ useFormatPrice(total) }}
     </div>
 
-    <!-- total -->
-    <div class="text-start text-lg font-bold">
+    <!-- extra discount -->
+    <div v-if="invoiceSource === 'client'" class="text-start text-lg font-bold">
       {{ $t('extraDiscount') }}:
       <InputNumber
         v-model="extraDiscount"
@@ -328,8 +325,8 @@ function getField(key: string) {
       />
     </div>
 
-    <!-- total -->
-    <div class="text-start text-lg font-bold">
+    <!-- total after discount -->
+    <div v-if="invoiceSource === 'client'" class="text-start text-lg font-bold">
       {{ $t('totalAfterDiscount') }}:
       {{ useFormatPrice(total - (discount + extraDiscount)) }}
     </div>

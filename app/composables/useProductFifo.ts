@@ -29,7 +29,9 @@ export const useFIFO = () => {
       // 3) Revenue ✅
       const { data: items, error: revenueErr } = await supabase()
         .from('invoice_items')
-        .select('line_total, discount, invoices!inner(invoice_source)')
+        .select(
+          'line_total, discount, invoices!inner(invoice_source, extra_discount)'
+        )
         .eq('invoices.invoice_source', 'client')
         .eq('product_id', productId);
 
@@ -37,7 +39,9 @@ export const useFIFO = () => {
 
       revenue.value = items?.reduce(
         (sum: number, row: any) =>
-          sum + Number(row.line_total || 0) - Number(row.discount || 0),
+          sum +
+          Number(row.line_total || 0) -
+          Number(row.discount + row.invoices?.extra_discount || 0),
         0
       );
     } catch (e: any) {

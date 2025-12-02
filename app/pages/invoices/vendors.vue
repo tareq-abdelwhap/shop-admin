@@ -1,27 +1,23 @@
 <script setup lang="ts">
-const select = '*, shop_members ( full_name )';
+const select = '*, shop_members(full_name), invoice_items(sum:quantity)';
 
 const invoice_source = 'vendor';
 const where = { invoice_source };
 
-const invoiceStore = useStore('invoice', { select, where });
+const invoiceStore = useStore('invoices', { select, where });
 
 const t = (key: string) => computed(() => $t(`${key}`));
 
 const columns: Column[] = [
   { field: 'id', header: t('id'), class: 'w-24' },
-  { field: 'created_at', header: t('date'), type: 'date' },
-  { field: 'customer_name', header: t('customerName') },
-  { field: 'total', header: t('total') },
-  { field: 'total_after_discount', header: t('totalAfterDiscount') },
+  { field: 'created_at', header: t('date'), type: 'date', class: 'w-1/6' },
+  { field: 'customer_name', header: t('vendorName') },
+  { field: 'invoice_items.0.sum', header: t('quantity'), class: 'w-24' },
+  { field: 'total', header: t('total'), class: 'w-36' },
   { field: 'shop_members.full_name', header: t('createdBy') },
 ];
 
-const fields = ref<Field[]>([
-  { key: 'name', label: t('name'), type: 'text', value: null },
-  { key: 'price', label: t('price'), type: 'number', value: null },
-  { key: 'discount', label: t('discount'), type: 'number', value: null },
-]);
+const fields = ref<Field[]>([]);
 
 const createVisible = ref(false);
 const viewVisible = ref(false);
@@ -55,8 +51,7 @@ const afterCreate = async (_invoiceId: number) => {
     class="!w-full lg:!w-2/3"
   >
     <InvoiceCreate
-      key="vendor"
-      invoice-source="vendor"
+      :invoice-source="invoice_source"
       @submitted="invoiceId => afterCreate(invoiceId)"
     />
   </Drawer>
@@ -67,6 +62,6 @@ const afterCreate = async (_invoiceId: number) => {
     :position="$i18n.localeProperties.value.dir === 'rtl' ? 'left' : 'right'"
     class="!w-full lg:!w-2/3"
   >
-    <InvoiceView :invoice-id />
+    <InvoiceView :invoice-source="invoice_source" :invoice-id />
   </Drawer>
 </template>

@@ -45,6 +45,7 @@ export const useAuthStore = defineStore('auth', () => {
         ` 
           id,
           shop_id:shop_id,
+          role,
           shops (
             id,
             name,

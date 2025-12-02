@@ -2,33 +2,24 @@
 const instance = getCurrentInstance();
 const emitUsed = (emit: string) => !!instance?.vnode.props?.[emit];
 
-const {
-  module,
-  select,
-  count,
-  where,
-  columns,
-  fields,
-  customAddApi,
-  customEditApi,
-} = defineProps<{
-  module: string;
-  select?: string;
-  count?: { count: string };
-  where?: Record<string, string>;
-  columns: Column[];
-  fields: Field[];
+const { module, select, where, columns, fields, customAddApi, customEditApi } =
+  defineProps<{
+    module: string;
+    select?: string;
+    where?: Record<string, string>;
+    columns: Column[];
+    fields: Field[];
 
-  addValidationExceptions?: string[];
-  customAddApi?: string;
+    addValidationExceptions?: string[];
+    customAddApi?: string;
 
-  editValidationExceptions?: string[];
-  customEditApi?: string;
+    editValidationExceptions?: string[];
+    customEditApi?: string;
 
-  withViewButton?: boolean;
-  withEditButton?: boolean;
-  withDeleteButton?: boolean;
-}>();
+    withViewButton?: boolean;
+    withEditButton?: boolean;
+    withDeleteButton?: boolean;
+  }>();
 
 const emit = defineEmits<{
   (e: 'add'): void;
@@ -38,7 +29,7 @@ const emit = defineEmits<{
 
 const { authUser } = storeToRefs(useAuthStore());
 
-const store = useStore(module, { select, count, where });
+const store = useStore(module, { select, where });
 const { viewType, records, submitting } = storeToRefs(store);
 store.fetchRecords();
 
@@ -211,22 +202,7 @@ const changeTableView = () => {
       @remove="record => deleteRestoreRecord('delete', record)"
       @restore="record => deleteRestoreRecord('restore', record)"
       @sort="sort => sortRecords(sort)"
-    >
-      <slot name="table" />
-    </AppTable>
-
-    <!-- v-model="invoices.data"
-      :columns
-      :loading="invoices.loading"
-      pagination
-      :total-records="invoices.pagination.count"
-      :rows="invoices.pagination.rows"
-      with-view-button
-      with-delete-button
-      @view="record => [(invoiceId = record.id), (viewVisible = true)]"
-      @remove="record => removeInvoice(record)"
-      @restore="record => restoreInvoice(record)"
-      @page="page => onPagination(page)" -->
+    />
 
     <Dialog
       v-model:visible="isAdding"

@@ -2,11 +2,9 @@
 import { useMediaQuery } from '@vueuse/core';
 import { Drawer } from 'primevue';
 
-const { authUser } = storeToRefs(useAuthStore());
+const { authUser, isOwner } = storeToRefs(useAuthStore());
 
 const route = useRoute();
-const { t } = useI18n();
-const { isOwner } = storeToRefs(useRoleStore());
 
 const collapsed = useCookie<boolean>('collapsed');
 
@@ -19,13 +17,11 @@ const menu = [
   { label: 'products', icon: 'pi pi-box', to: '/products' },
   { label: 'invoices_clients', icon: 'pi pi-receipt', to: '/invoices/clients' },
   { label: 'invoices_vendors', icon: 'pi pi-receipt', to: '/invoices/vendors' },
-  { label: 'income', icon: 'pi pi-dollar', to: '/income' },
-  { label: 'profile', icon: 'pi pi-user-edit', to: '/profile' },
 ];
 
 const pageTitle = computed(() => {
   const item = menu.find(m => route.path.startsWith(m.to));
-  return item ? t(item.label) : 'CRM';
+  return item ? $t(item.label) : 'CRM';
 });
 
 const isMobile = useMediaQuery('(max-width: 768px)');

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-const { invoiceId } = defineProps<{
+const { invoiceSource, invoiceId } = defineProps<{
+  invoiceSource?: 'client' | 'vendor';
   invoiceId: number | undefined;
 }>();
 
@@ -90,7 +91,7 @@ fetchInvoice();
         </template>
       </Column>
 
-      <Column :header="$t('discount')">
+      <Column v-if="invoiceSource === 'client'" :header="$t('discount')">
         <template #body="{ data }">
           {{ useFormatPrice(data.discount) }}
         </template>
@@ -104,7 +105,10 @@ fetchInvoice();
         </template>
       </Column>
 
-      <Column :header="$t('totalAfterDiscount')">
+      <Column
+        v-if="invoiceSource === 'client'"
+        :header="$t('totalAfterDiscount')"
+      >
         <template #body="{ data }">
           {{ useFormatPrice(data.discount && data.line_total - data.discount) }}
         </template>
@@ -118,6 +122,7 @@ fetchInvoice();
             footerStyle="text-align:end"
           />
           <Column
+            v-if="invoiceSource === 'client'"
             :footer="
               useFormatPrice(items.reduce((sum, r) => sum + r.discount, 0) || 0)
             "
@@ -125,6 +130,7 @@ fetchInvoice();
           <Column :footer="items.reduce((sum, r) => sum + r.quantity, 0)" />
           <Column :footer="useFormatPrice(invoice?.total || 0)" />
           <Column
+            v-if="invoiceSource === 'client'"
             :footer="
               useFormatPrice(
                 (items.reduce((sum, r) => sum + r.discount, 0) &&
@@ -135,7 +141,7 @@ fetchInvoice();
             "
           />
         </Row>
-        <Row>
+        <Row v-if="invoiceSource === 'client'">
           <Column
             :footer="`${$t('extraDiscount')}:`"
             :colspan="3"
@@ -146,7 +152,7 @@ fetchInvoice();
             :footer="useFormatPrice(invoice?.extra_discount || 0)"
           />
         </Row>
-        <Row>
+        <Row v-if="invoiceSource === 'client'">
           <Column
             :footer="`${$t('totalAfterDiscount')}:`"
             :colspan="3"

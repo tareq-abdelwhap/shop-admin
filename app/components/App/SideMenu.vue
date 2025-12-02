@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import Button from 'primevue/button';
-import { useRoute, navigateTo } from '#imports';
-import { useAuthStore } from '~/stores/auth';
-
 interface MenuItem {
   label: string;
   icon: string;
@@ -15,7 +11,6 @@ const props = defineProps<{
 }>();
 
 const collapsed = props.isMobile ? ref(false) : useCookie<boolean>('collapsed');
-const toggleSidebar = () => (collapsed.value = !collapsed.value);
 
 const route = useRoute();
 
@@ -32,7 +27,7 @@ const logout = async () => {
 <template>
   <aside
     :class="[
-      'h-full flex flex-col bg-white dark:bg-zinc-900 shadow-md border-r dark:border-gray-700',
+      'h-full flex flex-col bg-white dark:bg-zinc-900 shadow-md',
       'transition-all duration-300 overflow-hidden rounded-lg',
       collapsed ? 'md:w-20' : 'md:w-64',
       'w-full',
