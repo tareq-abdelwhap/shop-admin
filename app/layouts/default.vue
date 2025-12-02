@@ -16,7 +16,9 @@ const menu = [
     ? [{ label: 'employees', icon: 'pi-users', to: '/employees' }]
     : []),
   { label: 'services', icon: 'pi-barcode', to: '/services' },
-  { label: 'invoices', icon: 'pi-receipt', to: '/invoices' },
+  { label: 'products', icon: 'pi-box', to: '/products' },
+  { label: 'invoices_clients', icon: 'pi-receipt', to: '/invoices/clients' },
+  { label: 'invoices_vendors', icon: 'pi-receipt', to: '/invoices/vendors' },
   { label: 'income', icon: 'pi-dollar', to: '/income' },
   { label: 'profile', icon: 'pi-user-edit', to: '/profile' },
 ];

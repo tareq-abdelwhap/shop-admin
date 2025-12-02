@@ -30,7 +30,7 @@ export const useRoleStore = defineStore('shopStore', () => {
       .from('shop_members')
       .select('role')
       .eq('shop_id', authUser.value.shopId)
-      .eq('user_id', authUser.value.id)
+      .eq('user_id', authUser.value.user_id)
       .single();
 
     loading.value = false;

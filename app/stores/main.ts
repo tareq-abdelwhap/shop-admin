@@ -2,10 +2,11 @@ export const useStore = (
   tableName: string,
   options?: {
     select?: string;
+    count?: { count: string };
     where?: any;
   }
 ) => {
-  return defineStore(`mainStore-${tableName}`, () => {
+  return defineStore(`store-${tableName}-${JSON.stringify(options)}`, () => {
     const { authUser } = storeToRefs(useAuthStore());
 
     /* Handling Tables */
@@ -31,11 +32,11 @@ export const useStore = (
 
       let query = supabase()
         .from(tableName)
-        .select(options.select || '*', { count: 'exact' })
+        .select(options?.select || '*', { count: 'exact' })
         .eq('shop_id', authUser.value.shopId)
         .range(page * rows, page * rows + rows - 1);
 
-      if (options.where && Object.keys(options.where).length > 0) {
+      if (options?.where && Object.keys(options.where).length > 0) {
         Object.entries(options.where).forEach(([key, value]) => {
           query = query.eq(key, value);
         });
@@ -76,7 +77,11 @@ export const useStore = (
 
     const addRecord = async (payload: any): Promise<any> => {
       submitting.value = true;
-      const { data, error } = await supabase().from(tableName).insert(payload);
+      const { data, error } = await supabase()
+        .from(tableName)
+        .insert(payload)
+        .select()
+        .single();
 
       if (error) {
         console.error('Error soft deleting Record', error);
@@ -84,6 +89,8 @@ export const useStore = (
       }
       submitting.value = false;
       fetchRecords();
+
+      console.log('data', data);
 
       return { data };
     };

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-const { invoice_source = 'client' } = defineProps<{
-  invoice_source?: 'client' | 'vendor';
+const { invoiceSource = 'client' } = defineProps<{
+  invoiceSource?: 'client' | 'vendor';
 }>();
 
 const emit = defineEmits<{
@@ -9,17 +9,28 @@ const emit = defineEmits<{
 
 const { authUser } = storeToRefs(useAuthStore());
 
+const invoiceStore = useStore('invoices');
+
 const serviceStore = useStore('services');
 const { records: services } = storeToRefs(serviceStore);
-serviceStore.fetchRecords();
 
-const invoiceStore = useStore('invoices');
-const { records: invoices } = storeToRefs(invoiceStore);
+const productStore = useStore('products');
+const { records: products } = storeToRefs(productStore);
+
+const records = computed(() => [
+  ...(invoiceSource === 'client' ? services.value.data : []),
+  ...products.value.data,
+]);
+
+Promise.all([
+  productStore.fetchRecords(),
+  ...(invoiceSource === 'client' ? [serviceStore.fetchRecords()] : []),
+]);
 
 const items = ref<any>([
   {
     search: '',
-    item_type: 'manual',
+    item_type: invoiceSource === 'vendor' ? 'product' : 'manual',
     service_id: null,
     description: '',
     quantity: 1,
@@ -32,7 +43,7 @@ const items = ref<any>([
 const addRow = () => {
   items.value.push({
     search: '',
-    item_type: 'manual',
+    item_type: invoiceSource === 'vendor' ? 'product' : 'manual',
     service_id: null,
     description: '',
     quantity: 1,
@@ -52,9 +63,9 @@ const searchItem = (index: number) => {
     return;
   }
 
-  const serviceMatches = services.value.data
+  const serviceMatches = records.value
     .filter(s => s.name.toLowerCase().includes(term))
-    .map(s => ({ ...s, type: 'service' }));
+    .map(s => ({ ...s, type: 'stock' in s ? 'product' : 'service' }));
 
   // @ts-ignore
   items.value[index]!.suggestions = [...serviceMatches];
@@ -63,15 +74,29 @@ const searchItem = (index: number) => {
 const selectItem = (index: number, suggestion: any) => {
   if (typeof suggestion === 'string') return;
 
+  console.log('suggestion', suggestion);
+  console.log(`'stock' in suggestion`, 'stock' in suggestion);
+
   // items.value[index]!.suggestions = [];
 
-  items.value[index]!.item_type = 'service';
-  items.value[index]!.service_id = suggestion.id;
+  items.value[index]!.item_type =
+    invoiceSource === 'vendor' || 'stock' in suggestion ? 'product' : 'service';
+
+  if (invoiceSource === 'vendor' || 'stock' in suggestion) {
+    items.value[index]!.service_id = null;
+    items.value[index]!.product_id = suggestion.id;
+  } else {
+    items.value[index]!.product_id = null;
+    items.value[index]!.service_id = suggestion.id;
+  }
+
   items.value[index]!.description = suggestion.name;
   items.value[index]!.unit_price = suggestion.price;
   items.value[index]!.discount = suggestion.discount;
 
-  // items.value[index]!.search = suggestion.name;
+  items.value[index]!.search = suggestion.name;
+
+  console.log('items.value[index]', items.value[index]);
 };
 
 const total = computed(() =>
@@ -98,27 +123,14 @@ const submitting = ref(false);
 const onFormSubmit = async () => {
   submitting.value = true;
 
-  // const { data: invoice, error } = await supabase()
-  //   .from('invoices')
-  //   .insert({
-  //     shop_id: authUser.value?.shopId,
-  //     customer_name: getField('customer_name').value,
-  //     total: total.value,
-  //     discount: discount.value,
-  //     extra_discount: extraDiscount.value,
-  //     created_by: authUser.value?.id,
-  //   })
-  //   .select()
-  //   .single();
-
-  const { date: invoice, error } = await invoiceStore.addRecord({
+  const { data: invoice, error } = await invoiceStore.addRecord({
     shop_id: authUser.value?.shopId,
     customer_name: getField('customer_name').value,
     total: total.value,
     discount: discount.value,
     extra_discount: extraDiscount.value,
     created_by: authUser.value?.id,
-    invoice_source,
+    invoice_source: invoiceSource,
   });
 
   if (error) {
@@ -130,6 +142,7 @@ const onFormSubmit = async () => {
     invoice_id: invoice.id,
     item_type: row.item_type,
     ...(row.service_id ? { service_id: row.service_id } : {}),
+    ...(row.product_id ? { product_id: row.product_id } : {}),
     description: row.search || row.description,
     quantity: row.quantity,
     unit_price: row.unit_price,
@@ -185,7 +198,7 @@ function getField(key: string) {
                   <Select
                     v-model="data.search"
                     editable
-                    :options="data.suggestions || services.data"
+                    :options="data.suggestions || records"
                     option-label="name"
                     :name="`item-${index}`"
                     size="small"

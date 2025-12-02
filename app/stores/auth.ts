@@ -1,6 +1,7 @@
 export const useAuthStore = defineStore('auth', () => {
   const authUser = useCookie<null | {
     id: string;
+    user_id: string;
     email: string;
     role: string;
     shopId: string;
@@ -11,6 +12,7 @@ export const useAuthStore = defineStore('auth', () => {
   const setUser = (
     u: {
       id: string;
+      user_id: string;
       email: string;
       role: string;
       shopId: string;
@@ -55,6 +57,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     setUser({
       id: data.id,
+      user_id: user.id!,
       email: user.email!,
       role: data.role,
       shopId: data.shop_id,
