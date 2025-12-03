@@ -89,8 +89,6 @@ export const useStore = (
       submitting.value = false;
       fetchRecords();
 
-      console.log('data', data);
-
       return { data };
     };
 
@@ -142,11 +140,18 @@ export const useStore = (
       }
     };
 
+    const error = ref();
     const customAPI = async (fn: () => any) => {
-      submitting.value = true;
-      await fn();
-      submitting.value = false;
-      fetchRecords();
+      try {
+        submitting.value = true;
+        await fn();
+        fetchRecords();
+      } catch (e) {
+        error.value = e;
+        throw e;
+      } finally {
+        submitting.value = false;
+      }
     };
 
     return {
@@ -162,6 +167,7 @@ export const useStore = (
 
       deleteRestoreRecord,
 
+      error,
       customAPI,
     };
   })();

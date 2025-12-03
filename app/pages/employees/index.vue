@@ -31,38 +31,38 @@ const fields = ref<Field[]>([
 ]);
 
 /* Adding Member */
-const createFields = ref(JSON.parse(JSON.stringify(fields.value)));
-const addMember = async () => {
-  await $fetch('/api/employees/add', {
-    method: 'POST',
-    body: {
-      shop_id: authUser.value?.shopId,
-      full_name: getField('full_name')?.value,
-      email: getField('email')?.value,
-      password: getField('password')?.value,
-      role: 'employee',
-    },
-  });
-};
+// const createFields = ref(JSON.parse(JSON.stringify(fields.value)));
+// const addMember = async () => {
+//   await $fetch('/api/employees/add', {
+//     method: 'POST',
+//     body: {
+//       shop_id: authUser.value?.shopId,
+//       full_name: getField('full_name')?.value,
+//       email: getField('email')?.value,
+//       password: getField('password')?.value,
+//       role: 'employee',
+//     },
+//   });
+// };
 
-const editFields = ref(JSON.parse(JSON.stringify(fields.value)));
-const editMember = async (member?: any, confirmed?: boolean) => {
-  await $fetch('/api/employees/edit', {
-    method: 'POST',
-    body: {
-      user_id: member.value.user_id,
-      full_name: getField('full_name', editFields.value)?.value,
-      email: getField('email', editFields.value)?.value,
-      ...(getField('password', editFields.value)?.value
-        ? { password: getField('password', editFields.value)?.value }
-        : {}),
-    },
-  });
-};
+// const editFields = ref(JSON.parse(JSON.stringify(fields.value)));
+// const editMember = async (member?: any, confirmed?: boolean) => {
+//   await $fetch('/api/employees/edit', {
+//     method: 'POST',
+//     body: {
+//       user_id: member.value.user_id,
+//       full_name: getField('full_name', editFields.value)?.value,
+//       email: getField('email', editFields.value)?.value,
+//       ...(getField('password', editFields.value)?.value
+//         ? { password: getField('password', editFields.value)?.value }
+//         : {}),
+//     },
+//   });
+// };
 
-function getField(key: string, _fields = createFields.value) {
-  return _fields.find((f: any) => f.key === key) || { value: '', label: '' };
-}
+// function getField(key: string, _fields = createFields.value) {
+//   return _fields.find((f: any) => f.key === key) || { value: '', label: '' };
+// }
 </script>
 
 <template>
@@ -71,7 +71,7 @@ function getField(key: string, _fields = createFields.value) {
     select="id, user_id, role, full_name, email, deleted_at"
     :columns
     :fields
-    :add-validation-exceptions="['password', 'user_id', 'id']"
+    :add-validation-exceptions="['user_id', 'id']"
     :edit-validation-exceptions="['password', 'user_id', 'id']"
     custom-add-api="/api/employees/add"
     custom-edit-api="/api/employees/edit"

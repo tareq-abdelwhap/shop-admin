@@ -31,44 +31,55 @@ const emit = defineEmits<{
 const { authUser, isOwner } = storeToRefs(useAuthStore());
 
 const store = useStore(module, { select, where });
-const { viewType, records, submitting } = storeToRefs(store);
+const { error, viewType, records, submitting } = storeToRefs(store);
 store.fetchRecords();
 
 /* Adding Record */
 const isAdding = ref(false);
 const createFields = ref(JSON.parse(JSON.stringify(fields)));
 const addRecord = async (confirmed?: boolean) => {
-  if (emitUsed('onAdd')) return emit('add');
+  try {
+    if (emitUsed('onAdd')) return emit('add');
 
-  if (!confirmed) {
-    isAdding.value = true;
-    return;
+    if (!confirmed) {
+      error.value = null;
+      createFields.value = createFields.value.map((f: any) => ({
+        ...f,
+        value: null,
+      }));
+
+      isAdding.value = true;
+      return;
+    }
+
+    const payload = {
+      shop_id: authUser.value?.shopId,
+      ...fields.reduce(
+        (acc: any, field) => ({
+          ...acc,
+          [field.key]: getField(field.key)?.value,
+        }),
+        {}
+      ),
+    };
+
+    if (customAddApi) {
+      await store.customAPI(() =>
+        $fetch(customAddApi, { method: 'POST', body: payload })
+      );
+    } else {
+      await store.addRecord(payload);
+    }
+
+    createFields.value = createFields.value.map((f: any) => ({
+      ...f,
+      value: null,
+    }));
+    isAdding.value = false;
+  } catch (e) {
+    console.log(e, error.value);
+    throw e;
   }
-
-  const payload = {
-    shop_id: authUser.value?.shopId,
-    ...fields.reduce(
-      (acc: any, field) => ({
-        ...acc,
-        [field.key]: getField(field.key)?.value,
-      }),
-      {}
-    ),
-  };
-
-  if (customAddApi) {
-    await store.customAPI(() =>
-      $fetch(customAddApi, { method: 'POST', body: payload })
-    );
-  } else {
-    await store.addRecord(payload);
-  }
-
-  createFields.value = createFields.value.map((f: any) => ({
-    ...f,
-    value: null,
-  }));
-  isAdding.value = false;
 };
 
 /* View Record */
@@ -88,40 +99,49 @@ const record = ref<any>(null);
 const editFields = ref(JSON.parse(JSON.stringify(fields)));
 
 const editRecord = async (_record?: any, confirmed?: boolean) => {
-  if (emitUsed('onEdit')) return emit('edit', record);
+  try {
+    if (emitUsed('onEdit')) return emit('edit', record);
 
-  if (!confirmed) {
-    isEditing.value = true;
-    record.value = _record;
+    if (!confirmed) {
+      error.value = null;
+      isEditing.value = true;
+      record.value = _record;
+      editFields.value = editFields.value.map((f: any) => ({
+        ...f,
+        // value: _record[f.key],
+        value: useGetField(_record, f.key),
+      }));
+
+      return;
+    }
+
+    const payload = {
+      ...fields.reduce(
+        (acc: any, field) => ({
+          ...acc,
+          [field.key]: getField(field.key, editFields.value)?.value,
+        }),
+        {}
+      ),
+    };
+
+    if (customEditApi) {
+      await store.customAPI(() =>
+        $fetch(customEditApi, { method: 'POST', body: payload })
+      );
+    } else {
+      await store.editRecord(record.value.id, payload);
+    }
+
     editFields.value = editFields.value.map((f: any) => ({
       ...f,
-      // value: _record[f.key],
-      value: useGetField(_record, f.key),
+      value: null,
     }));
-
-    return;
+    isEditing.value = false;
+  } catch (e) {
+    console.log(e, error.value);
+    throw e;
   }
-
-  const payload = {
-    ...fields.reduce(
-      (acc: any, field) => ({
-        ...acc,
-        [field.key]: getField(field.key, editFields.value)?.value,
-      }),
-      {}
-    ),
-  };
-
-  if (customEditApi) {
-    await store.customAPI(() =>
-      $fetch(customEditApi, { method: 'POST', body: payload })
-    );
-  } else {
-    await store.editRecord(record.value.id, payload);
-  }
-
-  editFields.value = editFields.value.map((f: any) => ({ ...f, value: null }));
-  isEditing.value = false;
 };
 
 const deletingId = ref<number | null>(null);
@@ -211,6 +231,8 @@ const changeTableView = () => {
       :header="$t('addRecord')"
       :style="{ width: '25rem' }"
     >
+      <Message v-if="error" severity="error" v-text="error?.statusMessage" />
+
       <AppForm
         v-model="createFields"
         :submitting
@@ -226,6 +248,8 @@ const changeTableView = () => {
       :header="$t('editRecord')"
       :style="{ width: '25rem' }"
     >
+      <Message v-if="error" severity="error" v-text="error?.statusMessage" />
+
       <AppForm
         v-model="editFields"
         :submitting

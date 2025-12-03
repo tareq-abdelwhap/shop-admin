@@ -26,7 +26,6 @@ const resolver = ({ values }: any) => {
   Object.entries(values)
     .filter(([key, value]) => fields.value.find(f => f.key === key))
     .forEach(([key, value]) => {
-      console.log('valid', validationExceptions.includes(key));
       if (validationExceptions.includes(key)) return;
       const field = getField(key);
       if (!value) errors[key] = [{ message: `${field?.label} is required.` }];
