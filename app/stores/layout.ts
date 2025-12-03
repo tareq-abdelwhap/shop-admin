@@ -15,7 +15,7 @@ export const useLayoutStore = defineStore('layout', () => {
     return item ? t(item.label) : 'CRM';
   });
 
-  const menu = ref<MenuSection[]>([
+  const menu = computed<MenuSection[]>(() => [
     {
       section: 'business_operations',
       items: [
@@ -29,7 +29,9 @@ export const useLayoutStore = defineStore('layout', () => {
           icon: 'pi pi-receipt',
           to: '/invoices/clients',
         },
-        { label: 'finance', icon: 'pi pi-money-bill', to: '/finance' },
+        ...(isOwner.value
+          ? [{ label: 'finance', icon: 'pi pi-money-bill', to: '/finance' }]
+          : []),
       ],
     },
 

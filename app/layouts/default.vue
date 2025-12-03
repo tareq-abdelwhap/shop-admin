@@ -4,6 +4,8 @@ import { Drawer } from 'primevue';
 const { isMobile, collapsed } = storeToRefs(useLayoutStore());
 
 const { authUser } = storeToRefs(useAuthStore());
+
+const { localeProperties } = useI18n();
 </script>
 
 <template>
@@ -14,7 +16,7 @@ const { authUser } = storeToRefs(useAuthStore());
     <component
       :is="isMobile ? Drawer : 'div'"
       v-model:visible="collapsed"
-      position="left"
+      :position="localeProperties.dir === 'rtl' ? 'right' : 'left'"
       :header="authUser?.shopName?.toUpperCase()"
       :class="[isMobile && 'w-64']"
     >

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { collapsed, menu: menuItems } = storeToRefs(useLayoutStore());
+const { isMobile, collapsed, menu: menuItems } = storeToRefs(useLayoutStore());
 
 const route = useRoute();
 const isActive = (item: MenuItem) => route.path.startsWith(item.to);
@@ -66,7 +66,7 @@ const logout = async () => await auth.logout();
 
             <transition name="fade-fast">
               <span
-                v-if="!collapsed"
+                v-if="!collapsed || isMobile"
                 class="whitespace-nowrap truncate flex-1 me-auto"
                 v-text="$t(item.label)"
               />
