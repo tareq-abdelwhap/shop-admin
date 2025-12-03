@@ -21,4 +21,15 @@ declare global {
     hide?: boolean;
     attrs?: Record<string, any>;
   };
+
+  interface MenuItem {
+    label: string;
+    icon: string;
+    to: string;
+  }
+
+  interface MenuSection {
+    section: string;
+    items: MenuItem[];
+  }
 }

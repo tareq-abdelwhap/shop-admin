@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-defineProps<{ title: string }>();
 const emit = defineEmits(['toggle-mobile']); // NEW
 
-const collapsed = useCookie<boolean>('collapsed');
+const { collapsed, pageTitle } = storeToRefs(useLayoutStore());
+
 const toggleSidebar = () => (collapsed.value = !collapsed.value);
 </script>
 
@@ -30,7 +30,7 @@ const toggleSidebar = () => (collapsed.value = !collapsed.value);
       />
 
       <!-- PAGE TITLE -->
-      <h1 class="text-xl font-semibold" v-text="title" />
+      <h1 class="text-xl font-semibold" v-text="pageTitle" />
     </div>
 
     <!-- RIGHT AREA -->

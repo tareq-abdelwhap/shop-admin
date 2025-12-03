@@ -1,30 +1,13 @@
 <script setup lang="ts">
-interface MenuItem {
-  label: string;
-  icon: string;
-  to: string;
-}
-
-interface MenuSection {
-  section: string;
-  items: MenuItem[];
-}
-
-const props = defineProps<{
-  menuItems: MenuSection[];
-  isMobile?: boolean;
-}>();
-
-const collapsed = props.isMobile ? ref(false) : useCookie<boolean>('collapsed');
+const { collapsed, menu: menuItems } = storeToRefs(useLayoutStore());
 
 const route = useRoute();
+const isActive = (item: MenuItem) => route.path.startsWith(item.to);
 
 const auth = useAuthStore();
 const { authUser } = storeToRefs(auth);
 
 const logout = async () => await auth.logout();
-
-const isActive = (item: MenuItem) => route.path.startsWith(item.to);
 </script>
 
 <template>
