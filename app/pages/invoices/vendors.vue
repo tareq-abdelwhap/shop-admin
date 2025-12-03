@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  middleware: (to, from) => useModuleMiddleware('inventory'),
+});
+
 const select = '*, shop_members(full_name), invoice_items(sum:quantity)';
 
 const invoice_source = 'vendor';

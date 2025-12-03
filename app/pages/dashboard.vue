@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const moduleStore = useModuleStore();
+
 const dashboardStore = useDashboardStore();
 const { dashboard } = storeToRefs(dashboardStore);
 dashboardStore.getMetrics();
@@ -9,20 +11,25 @@ const KPIs = computed(() => [
     value: dashboard.value.data?.total_revenue || 0,
     color: 'blue',
   },
-  {
-    title: $t('cogs'),
-    value: dashboard.value.data?.total_cogs || 0,
-    color: 'red',
-  },
+  ...(moduleStore.has('inventory')
+    ? [
+        {
+          title: $t('cogs'),
+          value: dashboard.value.data?.total_cogs || 0,
+          color: 'red',
+        },
+        {
+          title: $t('unitsSold'),
+          value: dashboard.value.data?.total_units_sold || 0,
+          color: 'purple',
+        },
+      ]
+    : []),
+
   {
     title: $t('profit'),
     value: dashboard.value.data?.total_profit || 0,
     color: 'green',
-  },
-  {
-    title: $t('unitsSold'),
-    value: dashboard.value.data?.total_units_sold || 0,
-    color: 'purple',
   },
   {
     title: $t('expenses'),
@@ -45,31 +52,46 @@ const overview = computed(() => {
   const d = dashboard.value.data;
 
   return {
-    labels: [
-      $t('revenue'),
-      $t('cogs'),
-      $t('expenses'),
-      $t('profit'),
-      $t('netProfit'),
-    ],
+    labels: [$t('overview')],
     datasets: [
       {
-        label: $t('overview'),
-        backgroundColor: [
-          '#3b82f6',
-          '#ef4444',
-          '#f97316',
-          '#22c55e',
-          '#a855f7',
-        ],
-        data: [
-          d?.total_revenue,
-          d?.total_cogs,
-          d?.total_expenses,
-          d?.total_profit,
-          d?.net_profit,
-        ],
-        barThickness: 36,
+        label: $t('revenue'),
+        backgroundColor: '#3b82f6',
+        data: [d?.total_revenue],
+        // barThickness: 36,
+        indexAxis: 'x',
+      },
+      ...(moduleStore.has('inventory')
+        ? [
+            {
+              label: $t('cogs'),
+              backgroundColor: '#ef4444',
+              data: [d?.total_cogs],
+              // barThickness: 36,
+              indexAxis: 'x',
+            },
+          ]
+        : []),
+
+      {
+        label: $t('expenses'),
+        backgroundColor: '#f97316',
+        data: [d?.total_expenses],
+        // barThickness: 36,
+        indexAxis: 'x',
+      },
+      {
+        label: $t('profit'),
+        backgroundColor: '#22c55e',
+        data: [d?.total_profit],
+        // barThickness: 36,
+        indexAxis: 'x',
+      },
+      {
+        label: $t('netProfit'),
+        backgroundColor: '#a855f7',
+        data: [d?.net_profit],
+        // barThickness: 36,
         indexAxis: 'x',
       },
     ],
@@ -90,35 +112,24 @@ const dailySales = computed(() => {
         fill: false,
         tension: 0.4,
       },
-      {
-        label: 'COGS',
-        borderColor: '#ef4444',
-        data: items.map(i => i.cogs),
-        fill: false,
-        tension: 0.4,
-      },
+      ...(moduleStore.has('inventory')
+        ? [
+            {
+              label: 'COGS',
+              borderColor: '#ef4444',
+              data: items.map(i => i.cogs),
+              fill: false,
+              tension: 0.4,
+            },
+          ]
+        : []),
+
       {
         label: 'Profit',
         borderColor: '#22c55e',
         data: items.map(i => i.profit),
         fill: false,
         tension: 0.4,
-      },
-    ],
-  };
-});
-
-const profitByProduct = computed(() => {
-  const d = dashboard.value.data;
-  const items = d?.profit_by_product || [];
-
-  return {
-    labels: items.map(i => i.product_name),
-    datasets: [
-      {
-        label: 'Profit',
-        backgroundColor: '#22c55e',
-        data: items.map(i => i.profit),
       },
     ],
   };
@@ -158,7 +169,11 @@ const profitByProduct = computed(() => {
       </div>
 
       <!-- Profit by Product -->
-      <Panel header="Profit by Product" class="rounded-2xl border-none">
+      <Panel
+        v-if="moduleStore.has('inventory')"
+        header="Profit by Product"
+        class="rounded-2xl border-none"
+      >
         <DashboardProfitByProduct
           :items="dashboard.data?.profit_by_product || []"
         />

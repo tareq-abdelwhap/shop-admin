@@ -1,6 +1,15 @@
 export default {};
 
 declare global {
+  interface ShopModule {
+    module_key: string;
+    name: string;
+    description: string | null;
+    plan: string | null;
+    enabled: boolean;
+    ends_at?: string;
+  }
+
   type Column = {
     field: string;
     header: any;

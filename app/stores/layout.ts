@@ -3,6 +3,7 @@ import { useMediaQuery } from '@vueuse/core';
 export const useLayoutStore = defineStore('layout', () => {
   const route = useRoute();
   const { t } = useI18n();
+  const moduleStore = useModuleStore();
   const { isOwner } = storeToRefs(useAuthStore());
 
   const isMobile = useMediaQuery('(max-width: 768px)');
@@ -35,17 +36,21 @@ export const useLayoutStore = defineStore('layout', () => {
       ],
     },
 
-    {
-      section: 'inventory_and_purchases',
-      items: [
-        { label: 'products', icon: 'pi pi-box', to: '/products' },
-        {
-          label: 'invoices_vendors',
-          icon: 'pi pi-receipt',
-          to: '/invoices/vendors',
-        },
-      ],
-    },
+    ...(moduleStore.has('inventory')
+      ? [
+          {
+            section: 'inventory_and_purchases',
+            items: [
+              { label: 'products', icon: 'pi pi-box', to: '/products' },
+              {
+                label: 'invoices_vendors',
+                icon: 'pi pi-receipt',
+                to: '/invoices/vendors',
+              },
+            ],
+          },
+        ]
+      : []),
   ]);
 
   return { isMobile, collapsed, menu, pageTitle };
