@@ -5,7 +5,13 @@ const t = (key: string) => computed(() => $t(`${key}`));
 
 const fields = ref([
   { key: 'email', label: t('email'), type: 'email', value: '' },
-  { key: 'password', label: t('password'), type: 'password', value: '' },
+  {
+    key: 'password',
+    label: t('password'),
+    type: 'password',
+    value: '',
+    attrs: { feedback: false },
+  },
 ]);
 
 const submitting = ref(false);
