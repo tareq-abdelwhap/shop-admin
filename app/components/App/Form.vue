@@ -58,14 +58,25 @@ function getField(key: string) {
       :class="['flex flex-col gap-1 flex-1', field.hide && 'hidden']"
     >
       <FloatLabel variant="on">
+        <Select
+          v-if="field.type === 'select'"
+          v-model="field.value"
+          :options="field.options"
+          :name="field.key"
+          :size="fieldSize"
+          :fluid
+          v-bind="field.attrs"
+        />
+
         <InputNumber
-          v-if="field.type === 'number'"
+          v-else-if="field.type === 'number'"
           v-model="field.value"
           :id="field.key"
           autocomplete="off"
           :name="field.key"
           :size="fieldSize"
           :fluid
+          v-bind="field.attrs"
         />
 
         <Password
@@ -77,6 +88,7 @@ function getField(key: string) {
           toggleMask
           :size="fieldSize"
           :fluid
+          v-bind="field.attrs"
         />
 
         <InputText
@@ -88,6 +100,7 @@ function getField(key: string) {
           :type="field.type"
           :size="fieldSize"
           :fluid
+          v-bind="field.attrs"
         />
 
         <label :for="field.key">{{ field.label }}</label>

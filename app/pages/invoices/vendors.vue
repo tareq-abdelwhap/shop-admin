@@ -9,12 +9,23 @@ const invoiceStore = useStore('invoices', { select, where });
 const t = (key: string) => computed(() => $t(`${key}`));
 
 const columns: Column[] = [
-  { field: 'id', header: t('id'), class: 'w-24' },
-  { field: 'created_at', header: t('date'), type: 'date', class: 'w-1/6' },
-  { field: 'customer_name', header: t('vendorName') },
-  { field: 'invoice_items.0.sum', header: t('quantity'), class: 'w-24' },
-  { field: 'total', header: t('total'), class: 'w-36' },
-  { field: 'shop_members.full_name', header: t('createdBy') },
+  { field: 'id', header: t('id'), sortable: true, class: 'w-24' },
+  {
+    field: 'created_at',
+    header: t('date'),
+    type: 'date',
+    sortable: true,
+    class: 'w-1/6',
+  },
+  { field: 'customer_name', header: t('vendorName'), sortable: true },
+  {
+    field: 'invoice_items.0.sum',
+    header: t('quantity'),
+    sortable: true,
+    class: 'w-24',
+  },
+  { field: 'total', header: t('total'), sortable: true, class: 'w-36' },
+  { field: 'shop_members.full_name', header: t('createdBy'), sortable: true },
 ];
 
 const fields = ref<Field[]>([]);

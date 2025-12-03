@@ -15,8 +15,10 @@ declare global {
     key: string;
     label: any;
     type: string;
+    options?: any[];
     value: any;
     helperText?: boolean;
     hide?: boolean;
+    attrs?: Record<string, any>;
   };
 }

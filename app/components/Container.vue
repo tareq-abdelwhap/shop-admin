@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 max-w-7xl mx-auto">
+  <div class="md:p-4 max-w-7xl mx-auto">
     <slot />
   </div>
 </template>

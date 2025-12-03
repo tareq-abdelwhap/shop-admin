@@ -3,6 +3,11 @@ type Metrics = {
   total_profit: number;
   total_revenue: number;
   total_units_sold: number;
+
+  total_expenses: number;
+  total_manual_income: number;
+  net_profit: number;
+
   daily_sales: Array<{
     day: string;
     cogs: number;

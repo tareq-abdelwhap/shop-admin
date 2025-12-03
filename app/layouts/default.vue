@@ -17,6 +17,7 @@ const menu = [
   { label: 'products', icon: 'pi pi-box', to: '/products' },
   { label: 'invoices_clients', icon: 'pi pi-receipt', to: '/invoices/clients' },
   { label: 'invoices_vendors', icon: 'pi pi-receipt', to: '/invoices/vendors' },
+  { label: 'finance', icon: 'pi pi-money-bill', to: '/finance' },
 ];
 
 const pageTitle = computed(() => {
@@ -53,7 +54,7 @@ const isMobile = useMediaQuery('(max-width: 768px)');
       <!-- Header (now has hamburger) -->
       <AppHeader :title="pageTitle" @toggle-mobile="collapsed = true" />
 
-      <main class="p-4 flex-1">
+      <main class="py-4 px-1 flex-1">
         <slot />
       </main>
     </div>

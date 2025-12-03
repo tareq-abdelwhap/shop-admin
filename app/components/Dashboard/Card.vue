@@ -1,7 +1,7 @@
 <script setup lang="ts">
 defineProps<{
   title: string;
-  value: number;
+  value: string | number;
   color?: string;
 }>();
 </script>
@@ -14,6 +14,9 @@ defineProps<{
       'border-red-500': color === 'red',
       'border-green-500': color === 'green',
       'border-purple-500': color === 'purple',
+      'border-orange-500': color === 'orange',
+      'border-yellow-500': color === 'yellow',
+      'border-indigo-500': color === 'indigo',
     }"
   >
     <p class="text-sm text-gray-500 dark:text-gray-400">{{ title }}</p>
