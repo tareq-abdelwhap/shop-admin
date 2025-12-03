@@ -17,12 +17,12 @@ const columns: Column[] = [
 // Form validation setup
 const fields = ref<Field[]>([
   { key: 'name', label: t('name'), type: 'text', value: null },
-  {
-    key: 'vendor_price',
-    label: t('vendor_price'),
-    type: 'number',
-    value: null,
-  },
+  // {
+  //   key: 'vendor_price',
+  //   label: t('vendor_price'),
+  //   type: 'number',
+  //   value: null,
+  // },
   { key: 'price', label: t('price'), type: 'number', value: null },
   { key: 'discount', label: t('discount'), type: 'number', value: null },
 ]);
@@ -35,7 +35,7 @@ const { cogs, profit, revenue, loading, error, loadFIFO } = useFIFO();
     module="products"
     :columns
     :fields
-    :validation-exceptions="['discount']"
+    :edit-validation-exceptions="['discount']"
     with-edit-button
     with-delete-button
   />

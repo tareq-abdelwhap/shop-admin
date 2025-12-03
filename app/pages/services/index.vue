@@ -20,7 +20,9 @@ const fields = ref<Field[]>([
     module="services"
     :columns
     :fields
-    :validation-exceptions="['discount']"
+    :add-validation-exceptions="['discount']"
+    :edit-validation-exceptions="['discount']"
+    with-add-button
     with-edit-button
     with-delete-button
   />

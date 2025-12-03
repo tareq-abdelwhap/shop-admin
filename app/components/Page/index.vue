@@ -16,6 +16,7 @@ const { module, select, where, columns, fields, customAddApi, customEditApi } =
     editValidationExceptions?: string[];
     customEditApi?: string;
 
+    withAddButton?: boolean;
     withViewButton?: boolean;
     withEditButton?: boolean;
     withDeleteButton?: boolean;
@@ -27,7 +28,7 @@ const emit = defineEmits<{
   (e: 'sort', sort: { column: string; ascending: boolean }): void;
 }>();
 
-const { authUser } = storeToRefs(useAuthStore());
+const { authUser, isOwner } = storeToRefs(useAuthStore());
 
 const store = useStore(module, { select, where });
 const { viewType, records, submitting } = storeToRefs(store);
@@ -77,7 +78,6 @@ const recordId = ref(null);
 const viewRecord = async (record: any) => {
   if (emitUsed('onView')) return emit('view', record);
 
-  console.log('Opps');
   recordId.value = record.id;
   isViewing.value = true;
 };
@@ -178,6 +178,7 @@ const changeTableView = () => {
           />
 
           <Button
+            v-if="withAddButton"
             :label="`Create Record`"
             size="small"
             @click="() => addRecord()"
@@ -195,7 +196,7 @@ const changeTableView = () => {
       :rows="records.pagination.rows"
       :with-view-button
       :with-edit-button
-      :with-delete-button
+      :with-delete-button="withDeleteButton && isOwner"
       @page="page => onPagination(page)"
       @view="record => viewRecord(record)"
       @edit="record => editRecord(record)"

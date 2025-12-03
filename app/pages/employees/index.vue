@@ -75,6 +75,7 @@ function getField(key: string, _fields = createFields.value) {
     :edit-validation-exceptions="['password', 'user_id', 'id']"
     custom-add-api="/api/employees/add"
     custom-edit-api="/api/employees/edit"
+    with-add-button
     with-edit-button
     with-delete-button
   />

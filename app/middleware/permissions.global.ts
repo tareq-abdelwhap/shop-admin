@@ -1,14 +1,10 @@
 export default defineNuxtRouteMiddleware(async to => {
-  const shopPermissionStore = useRoleStore();
-  const { role } = storeToRefs(shopPermissionStore);
-  if (!role.value) await shopPermissionStore.fetchRole();
+  const { isOwner } = storeToRefs(useAuthStore());
 
   // pages that require admin/owner only
   const adminOnly = ['/employees'];
 
-  if (adminOnly.includes(to.path)) {
-    if (role.value !== 'owner' && role.value !== 'admin') {
-      return navigateTo('/dashboard');
-    }
+  if (adminOnly.includes(to.path) && !isOwner.value) {
+    return navigateTo('/dashboard');
   }
 });

@@ -38,6 +38,7 @@ const afterCreate = async (_invoiceId: number) => {
     :where
     :columns
     :fields
+    with-add-button
     with-view-button
     with-delete-button
     @add="() => (createVisible = true)"

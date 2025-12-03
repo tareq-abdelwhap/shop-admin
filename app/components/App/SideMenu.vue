@@ -17,11 +17,7 @@ const route = useRoute();
 const auth = useAuthStore();
 const { authUser } = storeToRefs(auth);
 
-const logout = async () => {
-  await supabase().auth.signOut();
-  auth.setUser(null);
-  navigateTo('/auth/login');
-};
+const logout = async () => await auth.logout();
 </script>
 
 <template>
