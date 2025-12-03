@@ -56,6 +56,9 @@
   "manualIncome": "Manual Income",
   "netProfit": "Net Profit",
 
+  "business_operations": "Business Operations",
+  "inventory_and_purchases": "Inventory and Purchases",
+
   "time": {
     "justNow": "just now",
     "past": "{n} ago",

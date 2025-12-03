@@ -56,6 +56,9 @@
   "manualIncome": "دخل يدوي",
   "netProfit": "الربح الصافي",
 
+  "business_operations": "عمليات التجارة",
+  "inventory_and_purchases": "المخزن والمشتريات",
+
   "time": {
     "justNow": "الآن",
     "past": "منذ {n}",

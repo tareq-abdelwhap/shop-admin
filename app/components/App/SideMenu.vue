@@ -5,8 +5,13 @@ interface MenuItem {
   to: string;
 }
 
+interface MenuSection {
+  section: string;
+  items: MenuItem[];
+}
+
 const props = defineProps<{
-  menuItems: MenuItem[];
+  menuItems: MenuSection[];
   isMobile?: boolean;
 }>();
 
@@ -18,6 +23,8 @@ const auth = useAuthStore();
 const { authUser } = storeToRefs(auth);
 
 const logout = async () => await auth.logout();
+
+const isActive = (item: MenuItem) => route.path.startsWith(item.to);
 </script>
 
 <template>
@@ -42,29 +49,47 @@ const logout = async () => await auth.logout();
       </transition>
     </header>
 
-    <!-- Menu -->
-    <nav class="flex-1 py-3">
-      <div v-for="item in menuItems" :key="item.to" class="group">
-        <NuxtLink
-          :to="item.to"
-          class="flex items-center gap-3 mx-2 mb-1 rounded-lg transition-all"
-          :class="[
-            'px-4 py-3',
-            'hover:bg-gray-200 dark:hover:bg-gray-700 transition',
-            route.path.startsWith(item.to) &&
-              'font-bold text-green-600 dark:text-green-400',
-          ]"
-        >
-          <i :class="[item.icon, 'text-xl w-6 text-center mx-auto shrink']" />
+    <!-- Sections -->
+    <nav class="flex-1 py-3 overflow-y-auto">
+      <div
+        v-for="(section, idx) in menuItems"
+        :key="section.section"
+        :class="[
+          'px-2 mb-4 dark:border-gray-700',
+          idx !== menuItems.length - 1 && 'border-b',
+        ]"
+      >
+        <!-- Section Title -->
+        <transition v-if="!collapsed" name="fade-fast">
+          <h4
+            class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-2 px-2"
+            v-text="$t(section.section)"
+          />
+        </transition>
 
-          <transition name="fade-fast">
-            <span
-              v-if="!collapsed"
-              class="whitespace-nowrap truncate flex-1 me-auto"
-              v-text="$t(item.label)"
-            />
-          </transition>
-        </NuxtLink>
+        <!-- Section Items -->
+        <div v-for="item in section.items" :key="item.to">
+          <NuxtLink
+            :to="item.to"
+            class="flex items-center gap-3 mx-1 mb-1 rounded-lg transition-all px-4 py-3"
+            :class="[
+              isActive(item)
+                ? 'font-bold text-green-600 dark:text-green-400'
+                : 'text-gray-700 dark:text-gray-200',
+              'hover:bg-gray-200 dark:hover:bg-gray-700',
+            ]"
+          >
+            <i :class="[item.icon, 'text-xl w-6 text-center shrink']" />
+
+            <transition name="fade-fast">
+              <span
+                v-if="!collapsed"
+                class="whitespace-nowrap truncate flex-1 me-auto"
+                v-text="$t(item.label)"
+              />
+            </transition>
+          </NuxtLink>
+        </div>
       </div>
     </nav>
 
