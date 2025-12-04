@@ -74,9 +74,6 @@ const searchItem = (index: number) => {
 const selectItem = (index: number, suggestion: any) => {
   if (typeof suggestion === 'string') return;
 
-  console.log('suggestion', suggestion);
-  console.log(`'stock' in suggestion`, 'stock' in suggestion);
-
   // items.value[index]!.suggestions = [];
 
   items.value[index]!.item_type =
@@ -101,8 +98,6 @@ const selectItem = (index: number, suggestion: any) => {
   }
 
   items.value[index]!.search = suggestion.name;
-
-  console.log('items.value[index]', items.value[index]);
 };
 
 const total = computed(() =>

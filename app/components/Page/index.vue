@@ -77,7 +77,7 @@ const addRecord = async (confirmed?: boolean) => {
     }));
     isAdding.value = false;
   } catch (e) {
-    console.log(e, error.value);
+    console.error(e, error.value);
     throw e;
   }
 };
@@ -139,7 +139,7 @@ const editRecord = async (_record?: any, confirmed?: boolean) => {
     }));
     isEditing.value = false;
   } catch (e) {
-    console.log(e, error.value);
+    console.error(e, error.value);
     throw e;
   }
 };

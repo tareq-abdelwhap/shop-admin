@@ -66,7 +66,6 @@ export const useAuthStore = defineStore('auth', () => {
     const { data: shopMember } = await shop_member(user.id);
 
     await moduleStore.getModules(shopMember.shop_id);
-    console.log('modules', modules.value);
 
     setUser({
       id: shopMember.id,
