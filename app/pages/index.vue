@@ -47,6 +47,7 @@ const formatPrice = (p: number, c: string) => `${p} ${c}/month`;
       </p>
 
       <div class="flex justify-center gap-4 mt-8">
+        <!-- Smooth scroll to pricing -->
         <NuxtLink
           to="#pricing"
           class="px-6 py-3 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700 shadow"

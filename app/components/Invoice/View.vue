@@ -54,124 +54,147 @@ fetchInvoice();
     />
   </div>
 
-  <div id="printer" :dir="$i18n.localeProperties.value.dir">
-    <div class="print-header grid grid-cols-2 gap-8 mb-10">
-      <div class="grid grid-cols-2 gap-2">
-        <span class="font-semibold" v-text="`${$t('customerName')}:`" />
-        <span class="" v-text="invoice?.customer_name" />
+  <div
+    id="printer"
+    class="flex flex-col gap-6 p-1"
+    :dir="$i18n.localeProperties.value.dir"
+  >
+    <Card class="w-fit">
+      <template #content>
+        <table>
+          <tr>
+            <td class="w-40">
+              <span class="font-semibold" v-text="`${$t('customerName')}:`" />
+            </td>
+            <td>
+              <span class="" v-text="invoice?.customer_name" />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="font-semibold" v-text="`${$t('date')}:`" />
+            </td>
+            <td>
+              <span
+                class=""
+                v-text="new Date(invoice?.created_at).toLocaleString()"
+              />
+            </td>
+          </tr>
 
-        <span class="font-semibold" v-text="`${$t('date')}:`" />
-        <span
-          class=""
-          v-text="new Date(invoice?.created_at).toLocaleString()"
-        />
-      </div>
+          <tr>
+            <td>
+              <span class="font-semibold" v-text="`${$t('agentName')}:`" />
+            </td>
+            <td>
+              <span class="" v-text="invoice?.shop_members?.full_name" />
+            </td>
+          </tr>
 
-      <div class="grid grid-cols-2 gap-2">
-        <span class="font-semibold" v-text="`${$t('agentName')}:`" />
-        <span class="" v-text="invoice?.shop_members?.full_name" />
+          <tr>
+            <td>
+              <span class="font-semibold" v-text="`${$t('shop')}:`" />
+            </td>
+            <td>
+              <span class="" v-text="authUser?.shopName" />
+            </td>
+          </tr>
+        </table>
+      </template>
+    </Card>
 
-        <span class="font-semibold" v-text="`${$t('shop')}:`" />
-        <span class="" v-text="authUser?.shopName" />
-      </div>
-    </div>
+    <table class="w-full border rounded-lg overflow-hidden">
+      <tr>
+        <th class="w-[4%] border text-start p-1.5">
+          <span class="font-semibold" v-text="$t('id')" />
+        </th>
+        <th class="border text-start p-1.5">
+          <span class="font-semibold" v-text="$t('description')" />
+        </th>
+        <th class="w-[15%] border text-start p-1.5">
+          <span class="font-semibold" v-text="$t('price')" />
+        </th>
+        <th class="w-[15%] border text-start p-1.5">
+          <span class="font-semibold" v-text="$t('discount')" />
+        </th>
+        <th class="w-[6%] border text-start p-1.5">
+          <span class="font-semibold" v-text="$t('quantity')" />
+        </th>
+        <th class="w-[15%] border text-start p-1.5">
+          <span class="font-semibold" v-text="$t('total')" />
+        </th>
+        <th class="w-[15%] border text-start p-1.5">
+          <span class="font-semibold" v-text="$t('totalAfterDiscount')" />
+        </th>
+      </tr>
 
-    <DataTable :value="items" :loading size="small">
-      <Column field="id" :header="$t('id')" class="w-10 text-center">
-        <template #body="{ data, index }">
-          {{ index + 1 }}
-        </template>
-      </Column>
-
-      <Column field="description" :header="$t('description')" class="w-1/4" />
-
-      <Column :header="$t('price')">
-        <template #body="{ data }">
-          {{ useFormatPrice(data.unit_price) }}
-        </template>
-      </Column>
-
-      <Column v-if="invoiceSource === 'client'" :header="$t('discount')">
-        <template #body="{ data }">
-          {{ useFormatPrice(data.discount) }}
-        </template>
-      </Column>
-
-      <Column field="quantity" :header="$t('quantity')" />
-
-      <Column :header="$t('total')">
-        <template #body="{ data }">
-          {{ useFormatPrice(data.line_total) }}
-        </template>
-      </Column>
-
-      <Column
-        v-if="invoiceSource === 'client'"
-        :header="$t('totalAfterDiscount')"
-      >
-        <template #body="{ data }">
-          {{ useFormatPrice(data.discount && data.line_total - data.discount) }}
-        </template>
-      </Column>
-
-      <ColumnGroup type="footer">
-        <Row>
-          <Column
-            :footer="`${$t('total')}:`"
-            :colspan="3"
-            footerStyle="text-align:end"
+      <tr v-for="(item, idx) in items" :key="item.id">
+        <td class="border p-1.5">
+          <span class="font-semibold" v-text="`${idx + 1}`" />
+        </td>
+        <td class="border p-1.5">
+          <span class="" v-text="item.description" />
+        </td>
+        <td class="border p-1.5">
+          <span class="" v-text="useFormatPrice(item.unit_price)" />
+        </td>
+        <td class="border p-1.5">
+          <span class="" v-text="useFormatPrice(item.discount)" />
+        </td>
+        <td class="border p-1.5">
+          <span class="" v-text="item.quantity" />
+        </td>
+        <td class="border p-1.5">
+          <span class="" v-text="useFormatPrice(item.line_total)" />
+        </td>
+        <td class="border p-1.5">
+          <span
+            class=""
+            v-text="useFormatPrice(item.line_total - item.discount)"
           />
-          <Column
-            v-if="invoiceSource === 'client'"
-            :footer="
-              useFormatPrice(items.reduce((sum, r) => sum + r.discount, 0) || 0)
-            "
-          />
-          <Column :footer="items.reduce((sum, r) => sum + r.quantity, 0)" />
-          <Column :footer="useFormatPrice(invoice?.total || 0)" />
-          <Column
-            v-if="invoiceSource === 'client'"
-            :footer="
-              useFormatPrice(
-                (items.reduce((sum, r) => sum + r.discount, 0) &&
-                  invoice?.total -
-                    items.reduce((sum, r) => sum + r.discount, 0)) ||
-                  0
-              )
-            "
-          />
-        </Row>
-        <Row v-if="invoiceSource === 'client'">
-          <Column
-            :footer="`${$t('extraDiscount')}:`"
-            :colspan="3"
-            footerStyle="text-align:end"
-          />
-          <Column
-            :colspan="4"
-            :footer="useFormatPrice(invoice?.extra_discount || 0)"
-          />
-        </Row>
-        <Row v-if="invoiceSource === 'client'">
-          <Column
-            :footer="`${$t('totalAfterDiscount')}:`"
-            :colspan="3"
-            footerStyle="text-align:end"
-          />
-          <Column :colspan="3" />
-          <Column
-            :footer="
-              useFormatPrice(
-                (invoice?.discount + invoice?.extra_discount &&
-                  invoice?.total -
-                    (invoice?.discount + invoice?.extra_discount)) ||
-                  0
-              )
-            "
-          />
-        </Row>
-      </ColumnGroup>
-    </DataTable>
+        </td>
+      </tr>
+    </table>
+
+    <table class="w-full">
+      <tr>
+        <td />
+        <td class="w-[21%] border text-start p-1.5">
+          <span class="font-semibold" v-text="$t('total')" />
+        </td>
+        <td class="w-[15%] border text-start p-1.5">
+          {{
+            useFormatPrice(
+              invoice?.total - items.reduce((sum, r) => sum + r.discount, 0)
+            )
+          }}
+        </td>
+      </tr>
+
+      <tr>
+        <td />
+        <td class="border text-start p-1.5">
+          <span class="font-semibold" v-text="$t('extraDiscount')" />
+        </td>
+        <td class="border text-start p-1.5">
+          {{ useFormatPrice(invoice?.extra_discount || 0) }}
+        </td>
+      </tr>
+
+      <tr>
+        <td />
+        <td class="border text-start p-1.5">
+          <span class="font-semibold" v-text="$t('totalAfterDiscount')" />
+        </td>
+        <td class="border text-start p-1.5">
+          {{
+            useFormatPrice(
+              invoice?.total - (invoice?.discount + invoice?.extra_discount)
+            )
+          }}
+        </td>
+      </tr>
+    </table>
   </div>
 </template>
 
@@ -179,6 +202,9 @@ fetchInvoice();
 @media print {
   #printer {
     font-size: 10px;
+  }
+  .border {
+    border: 1px solid #00000050 !important;
   }
 }
 </style>

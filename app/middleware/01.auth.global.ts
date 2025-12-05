@@ -1,10 +1,17 @@
 export default defineNuxtRouteMiddleware(async to => {
   if (to.path === '/') return;
 
+  const moduleStore = useModuleStore();
+
   const auth = useAuthStore();
   const { authUser } = storeToRefs(auth);
 
-  await auth.getUser();
+  if (!to.path.startsWith('/auth') && authUser.value) {
+    Promise.all([
+      auth.getUser(),
+      moduleStore.getModules(authUser.value?.shopId),
+    ]);
+  }
 
   if (!authUser.value && !to.path.startsWith('/auth')) {
     return navigateTo('/auth/login');

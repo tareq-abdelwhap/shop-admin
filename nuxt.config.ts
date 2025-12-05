@@ -8,10 +8,21 @@ export default defineNuxtConfig({
   ssr: false,
 
   runtimeConfig: {
+    stripeSecretKey: process.env.STRIPE_SECRET_KEY,
+    stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
+    stripePriceBasic: process.env.STRIPE_PRICE_BASIC,
+    stripePricePro: process.env.STRIPE_PRICE_PRO,
+
     supabaseServiceKey: process.env.SUPABASE_SERVICE_KEY,
     public: {
       supabaseUrl: process.env.SUPABASE_URL,
       supabaseKey: process.env.SUPABASE_KEY,
+    },
+  },
+
+  router: {
+    options: {
+      scrollBehaviorType: 'smooth',
     },
   },
 

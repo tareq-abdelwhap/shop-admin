@@ -20,8 +20,9 @@ const { locale } = useI18n();
           <NuxtLink to="/auth/login" class="text-sm hover:underline">
             Login
           </NuxtLink>
+
           <NuxtLink
-            to="/auth/signup"
+            to="#pricing"
             class="text-sm px-3 py-1.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
           >
             Get Started
