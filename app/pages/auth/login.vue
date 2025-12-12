@@ -54,7 +54,7 @@ const getField = (key: string) => fields.value.find(f => f.key === key);
           :submitting
           :submit-label="$t('login')"
           field-size="large"
-          class="!gap-12"
+          class="!gap-6"
           @submit="() => login()"
         />
       </template>

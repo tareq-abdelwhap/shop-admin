@@ -6,10 +6,7 @@ export const useModuleStore = defineStore('moduleStore', () => {
 
   const has = (key: string) => {
     return modules.value.data.some(
-      m =>
-        m.module_key === key &&
-        m.enabled &&
-        (!m.ends_at || (m.ends_at && m.ends_at > Date.now()))
+      m => m.module_key === key && m.enabled && !m.ends_at
     );
   };
 
@@ -17,9 +14,19 @@ export const useModuleStore = defineStore('moduleStore', () => {
     if (!shopId) return;
     modules.value.loading = true;
 
-    const { data, error } = await supabase().rpc('get_shop_modules', {
-      p_shop_id: shopId,
-    });
+    // const { data, error } = await supabase().rpc('get_shop_modules', {
+    //   p_shop_id: shopId,
+    // });
+
+    // const { data, error } = await supabase()
+    //   .from('modules')
+    //   .select('*, shop_modules!inner(*)')
+    //   .eq('shop_modules.shop_id', shopId);
+
+    const { data, error } = await supabase()
+      .from('shop_modules')
+      .select('*')
+      .eq('shop_id', shopId);
 
     modules.value.loading = false;
 

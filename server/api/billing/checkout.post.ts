@@ -9,9 +9,7 @@ export default defineEventHandler(async event => {
   }>(event);
 
   const config = useRuntimeConfig();
-  const stripe = new Stripe(config.stripeSecretKey, {
-    apiVersion: '2023-10-16',
-  });
+  const stripe = new Stripe(config.stripeSecretKey);
 
   const supabase = createClient(
     config.public.supabaseUrl,
@@ -36,43 +34,19 @@ export default defineEventHandler(async event => {
     });
   }
 
-  // 2) get subscription row
-  const { data: sub, error: subErr } = await supabase
-    .from('shop_subscriptions')
-    .select('*')
-    .eq('shop_id', body.shopId)
-    .single();
-
-  if (subErr || !sub) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: 'Subscription not found',
-    });
-  }
-
   // TODO: fetch or create Stripe customer for this shop/user
   // For now, we can just create a new customer:
   const session = await stripe.checkout.sessions.create({
     mode: 'subscription',
-    line_items: [
-      {
-        price: plan.stripe_price_id,
-        quantity: 1,
-      },
-    ],
-    success_url: 'https://yourapp.com/billing/success',
-    cancel_url: 'https://yourapp.com/billing/cancel',
-  });
-
-  // 3) store stripe data
-  await supabase
-    .from('shop_subscriptions')
-    .update({
+    line_items: [{ price: plan.stripe_price_id, quantity: 1 }],
+    success_url: `${config.public.appUrl}/billing/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${config.public.appUrl}/billing/cancel`,
+    metadata: {
+      shop_id: body.shopId,
+      plan_id: plan.id,
       stripe_price_id: plan.stripe_price_id,
-      stripe_subscription_id: null, // will fill via webhook
-      status: 'pending_payment',
-    })
-    .eq('id', sub.id);
+    },
+  });
 
   return { url: session.url };
 });

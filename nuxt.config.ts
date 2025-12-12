@@ -13,8 +13,17 @@ export default defineNuxtConfig({
     stripePriceBasic: process.env.STRIPE_PRICE_BASIC,
     stripePricePro: process.env.STRIPE_PRICE_PRO,
 
+    apsAccessCode: process.env.APS_ACCESS_CODE,
+    apsMerchantId: process.env.APS_MERCHANT_ID,
+    apsMerchantRef: process.env.APS_MERCHANT_REF,
+    apsSignature: process.env.APS_SIGNATURE,
+
+    apsApiBase: process.env.APS_API_BASE,
+    apsCurrency: process.env.APS_CURRENCY,
+
     supabaseServiceKey: process.env.SUPABASE_SERVICE_KEY,
     public: {
+      appUrl: process.env.APP_URL,
       supabaseUrl: process.env.SUPABASE_URL,
       supabaseKey: process.env.SUPABASE_KEY,
     },

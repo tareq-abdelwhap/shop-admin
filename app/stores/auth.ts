@@ -1,7 +1,4 @@
 export const useAuthStore = defineStore('auth', () => {
-  const moduleStore = useModuleStore();
-  const { modules } = storeToRefs(moduleStore);
-
   const authUser = useCookie<null | {
     id: string;
     user_id: string;
@@ -30,6 +27,54 @@ export const useAuthStore = defineStore('auth', () => {
   const isOwner = computed(() => authUser.value?.role === 'owner');
 
   const error = ref<string | null>(null);
+
+  const setup = ref<any>({ data: null });
+
+  const signup = async ({
+    plan_key,
+    shop_name,
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+    shop_name: string;
+    plan_key: string;
+  }) => {
+    const {
+      data: { user },
+      error: signupError,
+    } = await supabase().auth.signUp({ email, password });
+
+    if (signupError || !user) {
+      return (error.value = signupError?.message || 'Failed to sign up.');
+    }
+
+    const { data: setupData, error: setupErr } = await supabase().rpc(
+      'setup_shop_for_new_user',
+      { p_user_id: user.id, p_shop_name: shop_name, p_plan_key: plan_key }
+    );
+
+    if (setupErr) {
+      console.error('Setup error', setupErr);
+      error.value = 'Failed to create shop. Please contact support.';
+      return;
+    }
+
+    setup.value.data = setupData;
+  };
+
+  const verify = async ({ email, token }: { email: string; token: string }) => {
+    const { data, error: verifyErr } = await supabase().auth.verifyOtp({
+      email,
+      token,
+      type: 'email',
+    });
+
+    if (verifyErr) return (error.value = verifyErr.message);
+
+    return data;
+  };
 
   const getUser = async () => {
     const {
@@ -65,7 +110,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     const { data: shopMember } = await shop_member(user.id);
 
-    await moduleStore.getModules(shopMember.shop_id);
+    await useModuleStore().getModules(shopMember.shop_id);
 
     setUser({
       id: shopMember.id,
@@ -110,9 +155,12 @@ export const useAuthStore = defineStore('auth', () => {
   return {
     authUser,
     setUser,
-    error,
     isLoggedIn,
     isOwner,
+    error,
+    setup,
+    signup,
+    verify,
     getUser,
     login,
     logout,

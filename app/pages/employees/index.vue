@@ -1,6 +1,4 @@
 <script setup lang="ts">
-const { authUser } = storeToRefs(useAuthStore());
-
 const t = (key: string) => computed(() => $t(`${key}`));
 
 const columns: Column[] = [
@@ -29,40 +27,6 @@ const fields = ref<Field[]>([
     hide: true,
   },
 ]);
-
-/* Adding Member */
-// const createFields = ref(JSON.parse(JSON.stringify(fields.value)));
-// const addMember = async () => {
-//   await $fetch('/api/employees/add', {
-//     method: 'POST',
-//     body: {
-//       shop_id: authUser.value?.shopId,
-//       full_name: getField('full_name')?.value,
-//       email: getField('email')?.value,
-//       password: getField('password')?.value,
-//       role: 'employee',
-//     },
-//   });
-// };
-
-// const editFields = ref(JSON.parse(JSON.stringify(fields.value)));
-// const editMember = async (member?: any, confirmed?: boolean) => {
-//   await $fetch('/api/employees/edit', {
-//     method: 'POST',
-//     body: {
-//       user_id: member.value.user_id,
-//       full_name: getField('full_name', editFields.value)?.value,
-//       email: getField('email', editFields.value)?.value,
-//       ...(getField('password', editFields.value)?.value
-//         ? { password: getField('password', editFields.value)?.value }
-//         : {}),
-//     },
-//   });
-// };
-
-// function getField(key: string, _fields = createFields.value) {
-//   return _fields.find((f: any) => f.key === key) || { value: '', label: '' };
-// }
 </script>
 
 <template>

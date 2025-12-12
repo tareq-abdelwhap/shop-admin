@@ -34,7 +34,7 @@ const resolver = ({ values }: any) => {
   return { values, errors };
 };
 
-const onFormSubmit = ({ valid }: { valid: boolean }) => {
+const onFormSubmit = ({ valid }: { valid: boolean }): any => {
   if (valid) emit('submit');
 };
 

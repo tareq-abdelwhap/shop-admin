@@ -1,22 +1,16 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'public' });
 
-const plans = ref<any[]>([]);
-const loading = ref(true);
+const subStore = useSubscriptionStore();
+const { plans } = storeToRefs(subStore);
+subStore.getPlans();
 
-onMounted(async () => {
-  const { data } = await supabase()
-    .from('plans')
-    .select('id, key, name, description, price_monthly, currency, trial_days')
-    .eq('is_active', true)
-    .order('price_monthly', { ascending: true });
-
-  loading.value = false;
-  plans.value = data || [];
-});
-
+const isSigupOpen = ref(false);
+const plan = ref<any>(null);
 const goToSignup = (planKey: string) => {
-  navigateTo(`/auth/signup?plan=${planKey}`);
+  // return navigateTo({ path: `/auth/signup`, state: { plan: planKey } });
+  plan.value = plans.value?.data?.find(p => p.key === planKey);
+  isSigupOpen.value = true;
 };
 
 const formatPrice = (p: number, c: string) => `${p} ${c}/month`;
@@ -214,11 +208,13 @@ const formatPrice = (p: number, c: string) => `${p} ${c}/month`;
         </p>
       </div>
 
-      <div v-if="loading" class="text-center text-slate-500">Loading...</div>
+      <div v-if="plans.loading" class="text-center text-slate-500">
+        Loading...
+      </div>
 
       <div v-else class="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
         <div
-          v-for="plan in plans"
+          v-for="plan in plans.data"
           :key="plan.id"
           class="flex flex-col rounded-2xl bg-white dark:bg-black border border-slate-200 dark:border-slate-800 shadow-lg p-6"
           :class="plan.key === 'pro' ? 'ring-2 ring-blue-500' : ''"
@@ -301,6 +297,15 @@ const formatPrice = (p: number, c: string) => `${p} ${c}/month`;
         Choose a Plan
       </NuxtLink>
     </section>
+
+    <Dialog
+      v-model:visible="isSigupOpen"
+      modal
+      :header="$t('createYourAccount')"
+      :style="{ width: '35rem' }"
+    >
+      <AuthSignup :plan />
+    </Dialog>
   </div>
 </template>
 
