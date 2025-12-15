@@ -16,10 +16,10 @@ export default defineNuxtRouteMiddleware(async to => {
   }
 
   if (!authUser.value && !to.path.startsWith('/auth')) {
-    return navigateTo('/auth/login');
+    return navigateTo('/');
   }
 
-  if (authUser.value && to.path === '/auth/login') {
+  if (authUser.value && to.path === '/') {
     return navigateTo('/dashboard');
   }
 });

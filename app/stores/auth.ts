@@ -128,7 +128,7 @@ export const useAuthStore = defineStore('auth', () => {
   const logout = async () => {
     await supabase().auth.signOut();
     setUser(null);
-    await navigateTo('/auth/login');
+    await navigateTo('/');
   };
 
   async function shop_member(userId: string) {

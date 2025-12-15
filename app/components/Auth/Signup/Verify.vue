@@ -8,6 +8,7 @@ const { plan, email, password } = defineProps<{
 const auth = useAuthStore();
 const { setup } = storeToRefs(auth);
 
+const OTPLength = ref(6);
 const OTP = ref();
 
 const reSendOTP = () => console.log('Resend OTP clicked');
@@ -16,20 +17,16 @@ const initialValues = ref({ passcode: '' });
 
 const resolver = ({ values }: any) => {
   const errors: any = {};
-
-  // Object.entries(values)
-  //   .filter(([key, value]) => fields.value.find(f => f.key === key))
-  //   .forEach(([key, value]) => {
-  //     const field = getField(key);
-  //     if (!value) errors[key] = [{ message: `${field?.label} is required.` }];
-  //   });
-
-  if (!values.OTP || values.OTP.length < 6) {
+  if (!values.OTP || values.OTP.length < OTPLength.value) {
     errors.OTP = [{ message: 'Please enter the 6-digit code.' }];
   }
-
   return { values, errors };
 };
+
+watch(
+  OTP,
+  otp => otp && otp.length === OTPLength.value && onFormSubmit({ valid: true })
+);
 
 const submitting = ref(false);
 const onFormSubmit = async ({ valid }: { valid: boolean }) => {
@@ -69,15 +66,16 @@ const onFormSubmit = async ({ valid }: { valid: boolean }) => {
       @submit="onFormSubmit"
       class="flex flex-col items-start gap-0.5"
     >
-      <p class="text-surface-500 dark:text-surface-400 block">
-        Please enter the code sent to your email.
-      </p>
+      <p
+        class="text-surface-500 dark:text-surface-400 block text-sm"
+        v-text="$t('pleaseEnterVerificationCode')"
+      />
 
       <div class="flex items-center gap-4">
         <InputOtp
           v-model="OTP"
           name="OTP"
-          :length="6"
+          :length="OTPLength"
           style="gap: 0"
           integerOnly
         >
@@ -87,22 +85,18 @@ const onFormSubmit = async ({ valid }: { valid: boolean }) => {
               v-bind="attrs"
               v-on="events"
               :class="[
-                'custom-otp-input',
+                'size-10 border border-slate-200 dark:border-gray-800',
+                'bg-transparent text-center outline-none',
+                [1, OTPLength / 2 + 1].includes(index) && 'rounded-s-lg',
+                [OTPLength / 2, OTPLength].includes(index) && 'rounded-e-lg',
                 $form.OTP?.invalid && '!border-red-500',
               ]"
             />
-            <div v-if="index === 3" class="px-4">
+            <div v-if="index === OTPLength / 2" class="px-4">
               <i class="pi pi-minus" />
             </div>
           </template>
         </InputOtp>
-
-        <Button
-          label="Resend Code"
-          link
-          class="p-0"
-          @click="() => reSendOTP()"
-        />
       </div>
 
       <Message
@@ -114,6 +108,14 @@ const onFormSubmit = async ({ valid }: { valid: boolean }) => {
       />
 
       <div class="flex justify-between mt-2 self-stretch">
+        <Button
+          size="small"
+          label="Resend Code"
+          link
+          class="p-0"
+          @click="() => reSendOTP()"
+        />
+
         <Button
           type="submit"
           size="small"

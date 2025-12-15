@@ -1,7 +1,4 @@
-<!-- layouts/public.vue -->
-<script setup lang="ts">
-const { locale } = useI18n();
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div class="min-h-screen flex flex-col bg-slate-50 dark:bg-gray-950">
@@ -17,22 +14,25 @@ const { locale } = useI18n();
         </NuxtLink>
 
         <div class="flex items-center gap-3">
-          <NuxtLink to="/auth/login" class="text-sm hover:underline">
+          <!-- <NuxtLink to="/auth/login" class="text-sm hover:underline">
             Login
-          </NuxtLink>
+          </NuxtLink> -->
 
           <NuxtLink
             to="#pricing"
             class="text-sm px-3 py-1.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
           >
-            Get Started
+            let's Get Started
           </NuxtLink>
+
+          <AppLanguageSwitcher />
+          <AppColorModeSwitcher />
         </div>
       </div>
     </header>
 
     <!-- Page content -->
-    <main class="flex-1">
+    <main class="flex flex-col flex-1">
       <slot />
     </main>
 

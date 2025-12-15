@@ -47,6 +47,7 @@
   "rent": "Rent",
   "internet": "Internet",
   "finance": "Finance",
+  "month": "Month",
 
   "revenue": "Revenue",
   "cogs": "Cost of Goods Sold (COGS)",
@@ -58,6 +59,91 @@
 
   "business_operations": "Business Operations",
   "inventory_and_purchases": "Inventory and Purchases",
+
+  "manageYourShopWith": "Manage Your Shop With",
+  "claritySpeed": "Clarity, Speed",
+  "confidence": "Confidence",
+  "&": "＆",
+  "allInOneCRMForSmallShops": "A complete CRM for barbers, electricians, and small-business owners. Handle invoices, employees, services, expenses, and full inventory management — all in one place.",
+  "chooseAPlan": "Choose a Plan",
+  "problem": "Running a Shop is Hard…",
+  "runningAShopIsHard": "Papers get lost. Calculations go wrong. Employees forget details. And inventory tracking becomes a nightmare.",
+  "solution": "We fix all of that.",
+  "weFixAllOfThat": "With a single CRM that automates invoices, stock, discounts, profit, employees and reports.",
+
+  "allTheFeaturesYouNeed": "Everything You Need in One Place",
+  "designedForSmallBusiness": "Replace 10 apps with one clean, fast CRM built for small shops.",
+
+  "invoicesFeature": "Invoices & Services",
+  "createProfessionalInvoices": "Create, print, and track invoices. Add discounts, services, and work with full math accuracy.",
+
+  "employeeManagement": "Employees & Permissions",
+  "manageEmployeePermissions": "Add employees, restrict access, and track who handles each invoice.",
+
+  "analyticsFeature": "Dashboard & Reports",
+  "detailedSalesReports": "Revenue, profit, COGS, FIFO tracking, and daily sales visualized beautifully.",
+
+  "multipleShops": "Multi-Shop Support",
+  "manageMultipleShops": "Manage multiple shops under one account with separate permissions.",
+
+  "expensesFeature": "Expenses & Income",
+  "trackYourExpenses": "Record electricity bills, salaries, purchases, and track real profit.",
+
+  "inventoryFeature": "Inventory & Stock (Pro Only)",
+  "fifoInventoryTracking": "Full FIFO stock control. Vendor invoices update stock automatically. Never lose track again.",
+  "manageYourStockWithFIFO": "Our FIFO engine tracks stock, COGS, vendor purchases, and profit automatically.",
+  "inventoryFeature01": "Automatic stock increase with vendor invoices.",
+  "inventoryFeature02": "Automatic stock deduction on client invoices.",
+  "inventoryFeature03": "FIFO-based COGS & profit.",
+  "inventoryFeature04": "Batch-level cost tracking.",
+  "inventoryFeature05": "Low stock alerts.",
+
+  "testimonials": "Loved by Small Business Owners",
+  "whatOurUsersSay": "Real results from real shops.",
+  "testimonial1": "This CRM saved me 2 hours daily. The dashboard alone is worth it.",
+  "testimonial1Name": "Mohammed",
+  "testimonial1Role": "Barbershop Owner",
+  "testimonial2": "Finally, a clean system for invoices and inventory. No more papers!",
+  "testimonial2Name": "Ahmed",
+  "testimonial2Role": "Electric Shop Owner",
+  "testimonial3": "Employee permissions + printed invoices is perfect for my store.",
+  "testimonial3Name": "Sarah",
+  "testimonial3Role": "Beauty Salon Manager",
+
+  "pricing": "Pricing",
+  "chooseThePlanThatFits": "Pick a plan. No hidden fees. Cancel anytime.",
+
+  "pro": "Pro",
+  "proDescription": "All features including inventory management and multi-shop support.",
+  "basic": "Basic",
+  "basicDescription": "Essential features for invoices, employees, expenses, and reports.",
+  "egp": "EGP",
+  "dayFreeTrial": "day free trial",
+
+  "coreFeatures": "Core Features",
+
+  "choose": "Choose",
+
+  "faq": "FAQ",
+  "faq1Question": "Do I need a credit card for the free trial?",
+  "faq1Answer": "No. The free trial does not require a payment method.",
+  "faq2Question": "Can I upgrade later?",
+  "faq2Answer": "Yes. You can Upgrade anytime.",
+  "faq3Question": "Does the Pro plan include inventory tracking?",
+  "faq3Answer": "Yes. The Pro plan includes full FIFO inventory management.",
+  "faq4Question": "Can I use this for multiple shops?",
+  "faq4Answer": "Yes. You can manage multiple shops under one account.",
+
+  "getStarted": "Start Today",
+  "readyToManageYourShop": "Join shops that upgraded their workflow. Create your account in seconds.",
+
+  "createYourAccount": "Create Your Account",
+  "yourSelectedPlan": "Your selected plan is",
+
+  "signUp": "Sign Up",
+  "shopName": "Shop Name",
+  "verify": "Verify",
+  "pleaseEnterVerificationCode": "Please enter the verification code sent to your email.",
 
   "time": {
     "justNow": "just now",

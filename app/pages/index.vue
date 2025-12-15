@@ -13,7 +13,12 @@ const goToSignup = (planKey: string) => {
   isSigupOpen.value = true;
 };
 
-const formatPrice = (p: number, c: string) => `${p} ${c}/month`;
+const isLoginOpen = ref(false);
+const goToLogin = () => (isLoginOpen.value = true);
+
+const formatPrice = (p: number, c: string) =>
+  // computed(() => `${p} ${c}/${$t('month')}`);
+  computed(() => `${useFormatPrice(p)} ${$t(c)}/${$t('month')}`);
 </script>
 
 <template>
@@ -27,17 +32,16 @@ const formatPrice = (p: number, c: string) => `${p} ${c}/month`;
       <h1
         class="text-4xl md:text-5xl font-extrabold leading-tight max-w-3xl mx-auto"
       >
-        Manage Your Shop With
-        <span class="text-blue-600">Clarity, Speed</span> &
-        <span class="text-emerald-600">Confidence</span>
+        {{ $t('manageYourShopWith') }}
+        <span class="text-blue-600">{{ $t('claritySpeed') }}</span>
+        {{ $t('&') }}
+        <span class="text-emerald-600">{{ $t('confidence') }}</span>
       </h1>
 
       <p
         class="text-lg text-slate-600 dark:text-slate-300 mt-4 max-w-2xl mx-auto"
       >
-        A complete CRM for barbers, electricians, and small-business owners.
-        Handle invoices, employees, services, expenses, and full inventory
-        management — all in one place.
+        {{ $t('allInOneCRMForSmallShops') }}
       </p>
 
       <div class="flex justify-center gap-4 mt-8">
@@ -46,15 +50,16 @@ const formatPrice = (p: number, c: string) => `${p} ${c}/month`;
           to="#pricing"
           class="px-6 py-3 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700 shadow"
         >
-          View Plans
+          {{ $t('chooseAPlan') }}
         </NuxtLink>
 
-        <NuxtLink
-          to="/auth/login"
-          class="px-6 py-3 border border-slate-300 dark:border-slate-700 rounded-xl text-sm font-medium hover:bg-slate-100 dark:hover:bg-gray-800"
-        >
-          Login
-        </NuxtLink>
+        <Button
+          type="button"
+          :label="$t('login')"
+          outlined
+          class="rounded-xl text-sm font-medium px-6 py-3"
+          @click="() => goToLogin()"
+        />
       </div>
     </section>
 
@@ -64,22 +69,20 @@ const formatPrice = (p: number, c: string) => `${p} ${c}/month`;
     <section class="py-16 px-4 bg-white dark:bg-gray-950">
       <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-10 items-center">
         <div>
-          <h2 class="text-3xl font-bold mb-4">Running a Shop is Hard…</h2>
+          <h2 class="text-3xl font-bold mb-4">{{ $t('problem') }}</h2>
           <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
-            Papers get lost. Calculations go wrong. Employees forget details.
-            And inventory tracking becomes a nightmare.
+            {{ $t('runningAShopIsHard') }}
           </p>
 
           <p class="text-slate-600 dark:text-slate-300 mt-4 leading-relaxed">
-            <strong>We fix all of that.</strong>
-            With a single CRM that automates invoices, stock, discounts, profit,
-            employees, and reports.
+            <strong>{{ $t('solution') }}</strong>
+            {{ $t('weFixAllOfThat') }}
           </p>
         </div>
 
         <div>
           <img
-            src="https://cdn-icons-png.flaticon.com/512/3595/3595455.png"
+            src="https://cdn-icons-png.flaticon.com/512/8771/8771926.png"
             alt=""
             class="w-80 mx-auto opacity-90"
           />
@@ -95,43 +98,43 @@ const formatPrice = (p: number, c: string) => `${p} ${c}/month`;
     >
       <div class="max-w-5xl mx-auto text-center mb-10">
         <h2 class="text-3xl font-bold mb-2">
-          Everything You Need in One Place
+          {{ $t('allTheFeaturesYouNeed') }}
         </h2>
         <p class="text-slate-600 dark:text-slate-300">
-          Replace 10 apps with one clean, fast CRM built for small shops.
+          {{ $t('designedForSmallBusiness') }}
         </p>
       </div>
 
       <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
         <FeatureCard
           icon="pi pi-receipt"
-          title="Invoices & Services"
-          desc="Create, print, and track invoices. Add discounts, services, and work with full math accuracy."
+          :title="$t('invoicesFeature')"
+          :desc="$t('createProfessionalInvoices')"
         />
         <FeatureCard
           icon="pi pi-users"
-          title="Employees & Permissions"
-          desc="Add employees, restrict access, and track who handles each invoice."
+          :title="$t('employeeManagement')"
+          :desc="$t('manageEmployeePermissions')"
         />
         <FeatureCard
           icon="pi pi-chart-line"
-          title="Dashboard & Reports"
-          desc="Revenue, profit, COGS, FIFO tracking, and daily sales visualized beautifully."
+          :title="$t('analyticsFeature')"
+          :desc="$t('detailedSalesReports')"
         />
-        <FeatureCard
+        <!-- <FeatureCard
           icon="pi pi-shop"
-          title="Multi-Shop Support"
-          desc="Manage multiple shops under one account with separate permissions."
-        />
+          :title="$t('multipleShops')"
+          :desc="$t('manageMultipleShops')"
+        /> -->
         <FeatureCard
           icon="pi pi-dollar"
-          title="Expenses & Income"
-          desc="Record electricity bills, salaries, purchases, and track real profit."
+          :title="$t('expensesFeature')"
+          :desc="$t('trackYourExpenses')"
         />
         <FeatureCard
           icon="pi pi-database"
-          title="Inventory (Pro Only)"
-          desc="Full FIFO stock control. Vendor invoices update stock automatically. Never lose track again."
+          :title="$t('inventoryFeature')"
+          :desc="$t('fifoInventoryTracking')"
         />
       </div>
     </section>
@@ -149,19 +152,18 @@ const formatPrice = (p: number, c: string) => `${p} ${c}/month`;
         </div>
 
         <div>
-          <h2 class="text-3xl font-bold mb-4">Inventory & Stock (Pro Plan)</h2>
+          <h2 class="text-3xl font-bold mb-4">{{ $t('inventoryFeature') }}</h2>
 
           <p class="text-slate-600 dark:text-slate-300 mb-3">
-            Our FIFO engine tracks stock, COGS, vendor purchases, and profit
-            automatically.
+            {{ $t('manageYourStockWithFIFO') }}
           </p>
 
           <ul class="space-y-2 text-slate-700 dark:text-slate-300">
-            <li>✓ Automatic stock increase with vendor invoices</li>
-            <li>✓ Automatic stock deduction on client invoices</li>
-            <li>✓ FIFO-based COGS & profit</li>
-            <li>✓ Batch-level cost tracking</li>
-            <li>✓ Low stock alerts</li>
+            <li>✓ {{ $t('inventoryFeature01') }}</li>
+            <li>✓ {{ $t('inventoryFeature02') }}</li>
+            <li>✓ {{ $t('inventoryFeature03') }}</li>
+            <li>✓ {{ $t('inventoryFeature04') }}</li>
+            <!-- <li>✓ {{ $t('inventoryFeature05') }}</li> -->
           </ul>
         </div>
       </div>
@@ -172,28 +174,28 @@ const formatPrice = (p: number, c: string) => `${p} ${c}/month`;
     <!-- ======================== -->
     <section class="py-16 px-4 bg-slate-50 dark:bg-gray-900">
       <div class="max-w-5xl mx-auto text-center mb-10">
-        <h2 class="text-3xl font-bold mb-2">Loved by Small Business Owners</h2>
+        <h2 class="text-3xl font-bold mb-2">{{ $t('testimonials') }}</h2>
         <p class="text-slate-600 dark:text-slate-300">
-          Real results from real shops.
+          {{ $t('whatOurUsersSay') }}
         </p>
       </div>
 
       <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
         <Testimonial
-          quote="This CRM saved me 2 hours daily. The dashboard alone is worth it."
-          name="Mohammed"
-          role="Barbershop Owner"
+          :quote="$t('testimonial1')"
+          :name="$t('testimonial1Name')"
+          :role="$t('testimonial1Role')"
         />
         <Testimonial
-          quote="Finally, a clean system for invoices and inventory. No more papers!"
-          name="Ahmed"
-          role="Electric Shop Owner"
+          :quote="$t('testimonial2')"
+          :name="$t('testimonial2Name')"
+          :role="$t('testimonial2Role')"
         />
-        <Testimonial
-          quote="Employee permissions + printed invoices is perfect for my store."
-          name="Sarah"
-          role="Beauty Salon Manager"
-        />
+        <!-- <Testimonial
+          :quote="$t('testimonial3')"
+          :name="$t('testimonial3Name')"
+          :role="$t('testimonial3Role')"
+        /> -->
       </div>
     </section>
 
@@ -202,9 +204,9 @@ const formatPrice = (p: number, c: string) => `${p} ${c}/month`;
     <!-- ======================== -->
     <section id="pricing" class="py-20 px-4 bg-white dark:bg-gray-950">
       <div class="max-w-5xl mx-auto text-center mb-10">
-        <h2 class="text-3xl font-bold">Pricing</h2>
+        <h2 class="text-3xl font-bold">{{ $t('pricing') }}</h2>
         <p class="text-slate-600 dark:text-slate-300 mt-1">
-          Pick a plan. No hidden fees. Cancel anytime.
+          {{ $t('chooseThePlanThatFits') }}
         </p>
       </div>
 
@@ -219,35 +221,50 @@ const formatPrice = (p: number, c: string) => `${p} ${c}/month`;
           class="flex flex-col rounded-2xl bg-white dark:bg-black border border-slate-200 dark:border-slate-800 shadow-lg p-6"
           :class="plan.key === 'pro' ? 'ring-2 ring-blue-500' : ''"
         >
-          <h3 class="text-xl font-bold">{{ plan.name }}</h3>
+          <h3 class="text-xl font-bold">{{ $t(plan.key) }}</h3>
           <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">
-            {{ plan.description }}
+            {{ $t(`${plan.key}Description`) }}
           </p>
 
-          <div class="flex items-end justify-between gap-1">
-            <p class="text-3xl font-extrabold mt-4">
-              {{ formatPrice(plan.price_monthly, plan.currency) }}
+          <div class="flex items-end justify-between gap-1 mt-4">
+            <p class="text-3xl font-extrabold">
+              {{ formatPrice(plan.price_monthly, plan.currency.toLowerCase()) }}
             </p>
 
             <span
               v-if="plan.trial_days > 0"
-              class="mt-1 inline-block bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 text-xs px-3 py-1 rounded-full"
+              class="inline-block bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 text-xs px-3 py-1 rounded-full"
             >
-              {{ plan.trial_days }}-day free trial
+              {{ plan.trial_days }} - {{ $t('dayFreeTrial') }}
             </span>
           </div>
 
           <ul class="mt-6 text-sm space-y-1 text-slate-600 dark:text-slate-300">
-            <li>✓ All core features</li>
-            <li v-if="plan.key === 'basic'">✕ Inventory module</li>
-            <li v-else>✓ Inventory module</li>
+            <li>✓ {{ $t('coreFeatures') }}</li>
+
+            <li>
+              {{ ['basic'].includes(plan.key) ? '✕' : '✓' }}
+              {{ $t('inventoryFeature01') }}
+            </li>
+            <li>
+              {{ ['basic'].includes(plan.key) ? '✕' : '✓' }}
+              {{ $t('inventoryFeature02') }}
+            </li>
+            <li>
+              {{ ['basic'].includes(plan.key) ? '✕' : '✓' }}
+              {{ $t('inventoryFeature03') }}
+            </li>
+            <li>
+              {{ ['basic'].includes(plan.key) ? '✕' : '✓' }}
+              {{ $t('inventoryFeature04') }}
+            </li>
           </ul>
 
           <button
             class="mt-6 py-3 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700"
-            @click="goToSignup(plan.key)"
+            @click="() => goToSignup(plan.key)"
           >
-            Choose {{ plan.name }}
+            {{ $t('choose') }} {{ $t(plan.key) }}
           </button>
         </div>
       </div>
@@ -258,26 +275,14 @@ const formatPrice = (p: number, c: string) => `${p} ${c}/month`;
     <!-- ======================== -->
     <section class="py-16 px-4 bg-slate-50 dark:bg-gray-900">
       <div class="max-w-5xl mx-auto text-center mb-10">
-        <h2 class="text-3xl font-bold">FAQ</h2>
+        <h2 class="text-3xl font-bold">{{ $t('faq') }}</h2>
       </div>
 
       <div class="max-w-4xl mx-auto space-y-4">
-        <FAQ
-          q="Do I need a credit card for the free trial?"
-          a="No. The Basic plan's 3-day free trial does not require a payment method."
-        />
-        <FAQ
-          q="Can I upgrade later?"
-          a="Yes. You can switch from Basic to Pro anytime."
-        />
-        <FAQ
-          q="Does the Pro plan include inventory tracking?"
-          a="Yes. Pro unlocks full FIFO inventory and vendor purchases."
-        />
-        <FAQ
-          q="Can I use this for multiple shops?"
-          a="Yes. You can manage multiple shops under one account."
-        />
+        <FAQ :q="$t('faq1Question')" :a="$t('faq1Answer')" />
+        <FAQ :q="$t('faq2Question')" :a="$t('faq2Answer')" />
+        <FAQ :q="$t('faq3Question')" :a="$t('faq3Answer')" />
+        <!-- <FAQ :q="$t('faq4Question')" :a="$t('faq4Answer')" /> -->
       </div>
     </section>
 
@@ -285,16 +290,16 @@ const formatPrice = (p: number, c: string) => `${p} ${c}/month`;
     <!-- FINAL CTA               -->
     <!-- ======================== -->
     <section class="py-20 text-center bg-white dark:bg-gray-950">
-      <h2 class="text-3xl font-bold mb-4">Start Today</h2>
+      <h2 class="text-3xl font-bold mb-4">{{ $t('getStarted') }}</h2>
       <p class="text-slate-600 dark:text-slate-300 mb-6">
-        Join shops that upgraded their workflow. Create your account in seconds.
+        {{ $t('readyToManageYourShop') }}
       </p>
 
       <NuxtLink
         to="#pricing"
         class="px-8 py-3 bg-blue-600 text-white rounded-xl shadow hover:bg-blue-700"
       >
-        Choose a Plan
+        {{ $t('chooseAPlan') }}
       </NuxtLink>
     </section>
 
@@ -305,6 +310,15 @@ const formatPrice = (p: number, c: string) => `${p} ${c}/month`;
       :style="{ width: '35rem' }"
     >
       <AuthSignup :plan />
+    </Dialog>
+
+    <Dialog
+      v-model:visible="isLoginOpen"
+      modal
+      :header="$t('login')"
+      :style="{ width: '35rem' }"
+    >
+      <AuthLogin />
     </Dialog>
   </div>
 </template>

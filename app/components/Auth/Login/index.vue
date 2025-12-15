@@ -1,5 +1,8 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'public' });
+const auth = useAuthStore();
+const { error } = storeToRefs(auth);
+
+onMounted(() => (error.value = null));
 
 const t = (key: string) => computed(() => $t(`${key}`));
 
@@ -17,11 +20,9 @@ const fields = ref([
 const submitting = ref(false);
 
 const login = async () => {
+  error.value = null;
   submitting.value = true;
-  await useAuthStore().login(
-    getField('email')!.value,
-    getField('password')!.value
-  );
+  await auth.login(getField('email')!.value, getField('password')!.value);
   submitting.value = false;
 };
 
@@ -31,13 +32,9 @@ const getField = (key: string) => fields.value.find(f => f.key === key);
 <template>
   <div :class="['relative grow', 'flex items-center justify-center']">
     <Card class="w-full mx-3 max-w-xl md:px-8 md:scale-110 rounded-3xl">
-      <template #title>
-        <div class="flex items-center justify-center py-6">
-          <h1 class="text-2xl font-semibold" v-text="$t('login')" />
-        </div>
-      </template>
-
       <template #content>
+        <Message v-if="error" severity="error">{{ error }}</Message>
+
         <AppForm
           v-model="fields"
           :submitting

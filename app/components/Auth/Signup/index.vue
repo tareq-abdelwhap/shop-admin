@@ -40,9 +40,12 @@ const getField = (key: string) =>
 <template>
   <div class="flex flex-col">
     <div v-if="plan" class="mb-4 text-sm text-slate-600 dark:text-slate-300">
-      You selected plan: <strong>{{ plan.name }}</strong>
-      <span v-if="plan.trial_days > 0">
-        — includes {{ plan.trial_days }}-day free trial
+      {{ $t('yourSelectedPlan') }}: <strong>{{ $t(plan.key) }}</strong>
+      <span
+        v-if="plan.trial_days > 0"
+        class="mx-1 inline-block bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 text-xs px-3 py-1 rounded-full"
+      >
+        {{ plan.trial_days }} - {{ $t('dayFreeTrial') }}
       </span>
     </div>
 
