@@ -6,9 +6,16 @@ export default defineEventHandler(async event => {
   const body = await readBody<{ planKey: string; shopId: string }>(event);
 
   const config = useRuntimeConfig();
+
+  console.log('config', config);
+  console.log('config.stripeSecretKey', config.stripeSecretKey);
+
   const stripe = new Stripe(config.stripeSecretKey, {
-    apiVersion: '2024-06-20',
+    apiVersion: '2025-11-17.clover',
   });
+
+  console.log('config.public.supabaseUrl', config.public.supabaseUrl);
+  console.log('config.supabaseServiceKey', config.supabaseServiceKey);
 
   const supabase = createClient(
     config.public.supabaseUrl,
