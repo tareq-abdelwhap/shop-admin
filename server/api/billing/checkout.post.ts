@@ -101,8 +101,8 @@ export default defineEventHandler(async event => {
       },
     },
 
-    success_url: `${config.public.appUrl}/billing/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${config.public.appUrl}/billing/cancel`,
+    success_url: `${config.appUrl}/billing/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${config.appUrl}/billing/cancel`,
 
     metadata: {
       shop_id: shop.id,

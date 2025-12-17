@@ -22,6 +22,8 @@ export default defineNuxtConfig({
     apsCurrency: process.env.APS_CURRENCY,
 
     supabaseServiceKey: process.env.SUPABASE_SERVICE_KEY,
+    appUrl: process.env.APP_URL,
+
     public: {
       appUrl: process.env.APP_URL,
       supabaseUrl: process.env.SUPABASE_URL,
