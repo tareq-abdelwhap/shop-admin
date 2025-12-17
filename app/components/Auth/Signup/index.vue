@@ -3,9 +3,6 @@ import { AuthSignupForm, AuthSignupVerify } from '#components';
 
 const { plan } = defineProps<{ plan: any }>();
 
-// const email = ref('');
-// const password = ref('');
-
 const stepComponent = useTemplateRef<any>('stepComponent');
 const authFormFields = computed(
   () => stepComponent.value?.find((f: any) => 'fields' in f)?.fields
@@ -29,7 +26,7 @@ const steps = computed(() => [
       email: getField('email')?.value || '',
       password: getField('password')?.value || '',
     },
-    success: () => console.log('HEHEHEHE'),
+    success: () => {},
   },
 ]);
 

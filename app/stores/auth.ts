@@ -7,6 +7,7 @@ export const useAuthStore = defineStore('auth', () => {
     shopId: string;
     shopName: string;
     shopNumber?: string | null;
+    metadata: { [key: string]: string };
   }>('authUser');
 
   const setUser = (
@@ -18,6 +19,7 @@ export const useAuthStore = defineStore('auth', () => {
       shopId: string;
       shopName: string;
       shopNumber?: string | null;
+      metadata: { [key: string]: string };
     } | null
   ) => {
     authUser.value = u;
@@ -44,7 +46,11 @@ export const useAuthStore = defineStore('auth', () => {
     const {
       data: { user },
       error: signupError,
-    } = await supabase().auth.signUp({ email, password });
+    } = await supabase().auth.signUp({
+      email,
+      password,
+      options: { data: { plan_key, shop_name } },
+    });
 
     if (signupError || !user) {
       return (error.value = signupError?.message || 'Failed to sign up.');
@@ -94,6 +100,7 @@ export const useAuthStore = defineStore('auth', () => {
       shopId: data.shop_id,
       shopName: data.shops.name,
       shopNumber: data.shops.number,
+      metadata: user.user_metadata,
     });
   };
 
@@ -120,6 +127,7 @@ export const useAuthStore = defineStore('auth', () => {
       shopId: shopMember.shop_id,
       shopName: shopMember.shops.name,
       shopNumber: shopMember.shops.number,
+      metadata: user.user_metadata,
     });
 
     await navigateTo('/dashboard');
