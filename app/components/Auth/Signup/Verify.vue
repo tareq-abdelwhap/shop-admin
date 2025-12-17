@@ -39,7 +39,7 @@ const onFormSubmit = async ({ valid }: { valid: boolean }) => {
         // no trial, go pay now
         const res = await $fetch('/api/billing/checkout', {
           method: 'POST',
-          body: { planKey: plan.key, shopId: setup.value.shop_id },
+          body: { planKey: plan.key, shopId: setup.value?.data?.shop_id },
         });
 
         if (res?.url) {
