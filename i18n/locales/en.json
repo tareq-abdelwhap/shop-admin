@@ -113,12 +113,19 @@
   "pricing": "Pricing",
   "chooseThePlanThatFits": "Pick a plan. No hidden fees. Cancel anytime.",
 
-  "pro": "Pro",
-  "proDescription": "All features including inventory management and multi-shop support.",
   "basic": "Basic",
-  "basicDescription": "Essential features for invoices, employees, expenses, and reports.",
+  "basicDescription": "Essential features, without inventory management or multi-shop support.",
+
+  "pro": "Pro",
+  "proDescription": "All features including inventory management, without multi-shop support.",
+
+  "multi-store": "Multi-Store",
+  "multi-storeDescription": "All features including inventory management and multi-shop support.",
+
   "egp": "EGP",
   "dayFreeTrial": "day free trial",
+
+  "commingSoon": "coming soon",
 
   "coreFeatures": "Core Features",
 

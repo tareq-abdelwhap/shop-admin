@@ -4,7 +4,7 @@
   <div class="min-h-screen flex flex-col bg-slate-50 dark:bg-gray-950">
     <!-- Simple top nav -->
     <header
-      class="w-full border-b border-slate-200 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 backdrop-blur"
+      :class="['w-full border-b border-slate-200 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 backdrop-blur', 'sticky top-0 z-50']"
     >
       <div
         class="max-w-5xl mx-auto flex items-center justify-between px-4 py-3"

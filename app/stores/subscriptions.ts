@@ -1,4 +1,6 @@
 export const useSubscriptionStore = defineStore('subscriptionStore', () => {
+  const { t } = useI18n();
+
   /* Plans */
   const plans = ref<{ loading: boolean; data: any[]; error: any }>({
     loading: false,
@@ -12,9 +14,9 @@ export const useSubscriptionStore = defineStore('subscriptionStore', () => {
 
     const { data, error } = await supabase()
       .from('plans')
-      .select('id, key, name, description, price_monthly, currency, trial_days')
+      .select('id, key, name, description, price_monthly, currency, trial_days, soon')
       .eq('is_active', true)
-      .order('price_monthly', { ascending: true });
+      .order('created_at', { ascending: true });
 
     if (error) {
       console.error('Error fetching plans', error);
@@ -24,7 +26,7 @@ export const useSubscriptionStore = defineStore('subscriptionStore', () => {
     }
 
     plans.value.loading = false;
-    plans.value.data = data || [];
+    plans.value.data = data;
   };
 
   return {
