@@ -28,9 +28,9 @@ const formatPrice = (p: number, c: string) =>{
         :key="plan.id"
         :class="['relative overflow-hidden', 'flex flex-col gap-6 rounded-2xl bg-white dark:bg-black border border-slate-200 dark:border-slate-800 shadow-lg p-6', plan.key === 'pro' && 'ring-2 ring-blue-500 md:scale-105']"
       >
-        <!-- comming soon flag -->
+        <!-- coming soon flag -->
         <div v-if="plan.soon" :class="['absolute top-9 -end-8 rtl:-rotate-45 ltr:rotate-45 w-40 text-center', 'bg-red-500 text-white px-6']">
-          {{ $t('commingSoon') }}
+          {{ $t('comingSoon') }}
         </div>
          
 
