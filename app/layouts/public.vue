@@ -9,8 +9,9 @@
       <div
         class="max-w-5xl mx-auto flex items-center justify-between px-4 py-3"
       >
-        <NuxtLink to="/" class="flex items-center gap-2">
+        <NuxtLink to="/" class="flex flex-col items-center">
           <span class="font-bold text-lg tracking-tight">Shop CRM</span>
+          <span class="text-xs opacity-70 tracking-tight">by <strong>Building Suit</strong></span>
         </NuxtLink>
 
         <div class="flex items-center gap-3">
@@ -40,7 +41,7 @@
     <footer
       class="border-t border-slate-200 dark:border-gray-800 py-4 mt-8 text-center text-xs text-slate-500"
     >
-      © {{ new Date().getFullYear() }} Shop CRM. All rights reserved.
+      © {{ new Date().getFullYear() }} Shop CRM <small>by <strong>Building Suit</strong></small>. All rights reserved.
     </footer>
   </div>
 </template>

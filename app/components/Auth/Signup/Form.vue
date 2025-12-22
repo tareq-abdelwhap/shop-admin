@@ -51,7 +51,7 @@ defineExpose({ fields });
       :submitting
       :submit-label="$t('signUp')"
       field-size="large"
-      class="!gap-4"
+      class="!gap-4 me-6"
       @submit="() => handleSignup()"
     />
   </div>
