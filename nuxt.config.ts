@@ -64,6 +64,7 @@ export default defineNuxtConfig({
   i18n: {
     strategy: 'no_prefix',
     defaultLocale: 'ar',
+    detectBrowserLanguage: false, // Disable browser detection
     locales: [
       {
         code: 'ar',

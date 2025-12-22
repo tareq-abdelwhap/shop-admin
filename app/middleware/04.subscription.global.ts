@@ -1,10 +1,6 @@
 export default defineNuxtRouteMiddleware(async to => {
   // allow public pages
-  if (
-    to.path.startsWith('/auth') ||
-    to.path.startsWith('/billing') ||
-    to.path === '/'
-  ) {
+  if (to.path.startsWith('/billing') || to.path === '/') {
     return;
   }
 

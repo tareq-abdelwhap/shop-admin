@@ -8,11 +8,6 @@ export default defineNuxtRouteMiddleware(async to => {
   // not logged in -> login
   if (!authUser.value) return navigateTo('/');
 
-  // const shopStore = useShopStore();
-  // if (!authUser.value?.shopId) {
-  //   auth.get
-  // }
-
   const shopId = authUser.value?.shopId;
   if (!shopId) return navigateTo('/billing'); // or /shops
 
