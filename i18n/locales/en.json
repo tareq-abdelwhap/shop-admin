@@ -31,6 +31,7 @@
   "quantity": "Qty",
   "createdBy": "Created By",
   "service": "Service",
+  "serviceOrProduct": "Service or Product",
   "extraDiscount": "Extra Discount",
   "invoiceDetails": "Invoice Details",
   "invoice_kind_product": "Products",

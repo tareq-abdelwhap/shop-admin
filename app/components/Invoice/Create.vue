@@ -178,9 +178,9 @@ function getField(key: string) {
   >
     <Card>
       <template #content>
-        <div class="flex flex-col gap-6">
+        <div v-focustrap class="flex flex-col gap-6">
           <DataTable :value="items">
-            <Column :header="$t('service')" style="width: 35%">
+            <Column :header="$t('serviceOrProduct')" style="width: 35%">
               <template #body="{ data, index }">
                 <FloatLabel variant="on">
                   <Select
@@ -192,11 +192,12 @@ function getField(key: string) {
                     size="small"
                     :loading="services.loading"
                     fluid
+                    
                     @hide="() => selectItem(index, data.search)"
                   />
                   <!-- @update:model-value="$event => searchItem(index)" -->
 
-                  <label :for="`item-${index}`">{{ $t('service') }}</label>
+                  <label :for="`item-${index}`">{{ $t('serviceOrProduct') }}</label>
                 </FloatLabel>
               </template>
             </Column>
@@ -211,6 +212,7 @@ function getField(key: string) {
                     autocomplete="off"
                     :name="`price-${index}`"
                     size="small"
+                    autofocus
                     fluid
                   />
                   <label :for="`price-${index}`">{{ $t('price') }}</label>
