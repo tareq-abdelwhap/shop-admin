@@ -106,7 +106,7 @@ const dailySales = computed(() => {
     labels: items.map(i => i.day),
     datasets: [
       {
-        label: 'Revenue',
+        label: $t('revenue'),
         borderColor: '#3b82f6',
         data: items.map(i => i.revenue),
         fill: false,
@@ -115,7 +115,7 @@ const dailySales = computed(() => {
       ...(moduleStore.has('inventory')
         ? [
             {
-              label: 'COGS',
+              label: $t('cogs'),
               borderColor: '#ef4444',
               data: items.map(i => i.cogs),
               fill: false,
@@ -125,7 +125,7 @@ const dailySales = computed(() => {
         : []),
 
       {
-        label: 'Profit',
+        label: $t('profit'),
         borderColor: '#22c55e',
         data: items.map(i => i.profit),
         fill: false,
@@ -159,11 +159,11 @@ const dailySales = computed(() => {
 
       <!-- Charts -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Panel header="Overview" class="rounded-2xl border-none">
+        <Panel :header="$t('overview')" class="rounded-2xl border-none">
           <DashboardChart type="bar" :data="overview" />
         </Panel>
 
-        <Panel header="Daily Sales" class="rounded-2xl border-none">
+        <Panel :header="$t('dailySales')" class="rounded-2xl border-none">
           <DashboardChart type="line" :data="dailySales" />
         </Panel>
       </div>
@@ -171,7 +171,7 @@ const dailySales = computed(() => {
       <!-- Profit by Product -->
       <Panel
         v-if="moduleStore.has('inventory')"
-        header="Profit by Product"
+        :header="$t('profitByProduct')"
         class="rounded-2xl border-none"
       >
         <DashboardProfitByProduct

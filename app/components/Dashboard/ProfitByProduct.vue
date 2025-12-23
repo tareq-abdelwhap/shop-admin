@@ -15,9 +15,15 @@ defineProps<{
 
 <template>
   <DataTable :value="items" stripedRows responsiveLayout="scroll">
-    <Column field="product_name" header="Product" />
-    <Column field="revenue" header="Revenue" />
-    <Column field="cogs" header="COGS" />
-    <Column field="profit" header="Profit" />
+    <Column field="product_name" :header="$t('name')" />
+    <Column field="revenue" :header="$t('revenue')" />
+    <Column field="cogs" :header="$t('cogs')" />
+    <Column field="profit" :header="$t('profit')" />
+
+    <template #empty>
+      <div class="flex items-center justify-center">
+        <span>{{ $t('noData') }}</span>
+      </div>
+    </template>
   </DataTable>
 </template>

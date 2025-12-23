@@ -133,6 +133,14 @@ const sort = (column: string, ascending: boolean) => {
               </div>
             </template>
           </Column>
+
+
+          <template #empty>
+            <div class="flex items-center justify-center">
+              <span>{{ $t('noData') }}</span>
+            </div>
+          </template>
+
         </DataTable>
 
         <Paginator

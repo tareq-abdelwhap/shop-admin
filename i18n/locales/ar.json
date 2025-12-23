@@ -36,7 +36,10 @@
   "invoice_kind_product": "منتجات",
   "invoice_kind_service": "خدمات",
   "invoice_kind_mixed": "مختلط",
+  "add": "اضافة",
+  "save": "حفظ",
   "addRecord": "اضافة سجل",
+  "addItem": "اضافة اخرى",
   "editRecord": "تعديل سجل",
   "active": "نشط",
   "deleted": "محذوف",
@@ -48,7 +51,8 @@
   "internet": "انترنت",
   "finance": "مالية",
   "month": "شهر",
-
+  "print": "طباعة",
+  
   "let'sGetStarted": "ابدأ الآن",
 
   "revenue": "الدخل",
@@ -58,6 +62,16 @@
   "expenses": "المصروفات",
   "manualIncome": "دخل يدوي",
   "netProfit": "الربح الصافي",
+
+  "overview": "نظرة عامة",
+  "dailySales": "المبيعات اليومية",
+  "profitByProduct": "ربح المنتجات",
+
+  "noData": "لا يوجد بيانات",
+
+  "kind": "نوع",
+  "category": "الصنف",
+  "note": "ملاحظة",
 
   "business_operations": "عمليات التجارة",
   "inventory_and_purchases": "المخزن والمشتريات",

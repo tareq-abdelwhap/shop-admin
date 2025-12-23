@@ -199,7 +199,7 @@ const changeTableView = () => {
 
           <Button
             v-if="withAddButton"
-            :label="`Create Record`"
+            :label="$t('addRecord')"
             size="small"
             @click="() => addRecord()"
           />

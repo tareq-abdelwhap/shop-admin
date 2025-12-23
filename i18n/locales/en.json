@@ -36,7 +36,10 @@
   "invoice_kind_product": "Products",
   "invoice_kind_service": "Services",
   "invoice_kind_mixed": "Mixed",
+  "add": "Add",
+  "save": "Save",
   "addRecord": "Add Record",
+  "addItem": "Add Item",
   "editRecord": "Edit Record",
   "active": "Active",
   "deleted": "Deleted",
@@ -48,6 +51,7 @@
   "internet": "Internet",
   "finance": "Finance",
   "month": "Month",
+  "print": "Print",
 
   "let'sGetStarted": "Let's Get Started",
 
@@ -58,6 +62,16 @@
   "expenses": "Expenses",
   "manualIncome": "Manual Income",
   "netProfit": "Net Profit",
+
+  "overview": "Overview",
+  "dailySales": "Daily Sales",
+  "profitByProduct": "Profit by Product",
+
+  "noData": "No Data",
+
+  "kind": "Kind",
+  "category": "Category",
+  "note": "Note",
 
   "business_operations": "Business Operations",
   "inventory_and_purchases": "Inventory and Purchases",
