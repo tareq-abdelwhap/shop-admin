@@ -23,7 +23,7 @@
             to="#pricing"
             class="text-sm px-3 py-1.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
           >
-            let's Get Started
+            {{ $t("let'sGetStarted") }}
           </NuxtLink>
 
           <AppLanguageSwitcher />
