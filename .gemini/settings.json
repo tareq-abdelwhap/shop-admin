@@ -1,5 +1,11 @@
 {
   "ui": {
-    "showModelInfoInChat": true
+    "showModelInfoInChat": true,
+    "footer": {
+      "hideContextPercentage": false
+    }
+  },
+  "general": {
+    "previewFeatures": true
   }
 }
